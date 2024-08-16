@@ -57,6 +57,7 @@
    当你的 Pull Request 被授权后，你可以将你的代码合并到 `dev` 分支。在合并之前，请确保你的代码没有任何冲突，也没有任何测试失败。合并完成后，你可以安全地删除分支 `examplebranch`。
 
    **请注意：严格禁止直接 push 到 `dev` 分支**
+
 ## 鸟林通-代码注释规范
 
 全文浏览，重点已高亮标出
@@ -288,8 +289,3 @@ public class EmailBody implements Serializable{
 
 }
 ```
-
-
-
-
-
