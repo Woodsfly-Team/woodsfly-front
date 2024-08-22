@@ -17,25 +17,37 @@ import android.os.Looper
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.FragmentTransaction
+import com.example.woodsfly_skip.fragment.DiscoverFragment
+import com.example.woodsfly_skip.fragment.HomeFragment
+import com.example.woodsfly_skip.fragment.MineFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.File
 import java.io.IOException
 
-class HomeActivity : ComponentActivity() {
-    //microphone
-    private var sdcardfile : File? = null
-    private var recorder : MediaRecorder? = null
-    //camera
+class HomeActivity : AppCompatActivity() {
+
+    // 定义Fragment
+    private var mHomeFragment: HomeFragment? = null
+    private var mDiscoverFragment: DiscoverFragment? = null
+    private var mMineFragment: MineFragment? = null
+
+    private lateinit var mBottomNavigationView: BottomNavigationView
+
+    // microphone
+    private var sdcardfile: File? = null
+    private var recorder: MediaRecorder? = null
+    // camera
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
     private var imageUri: Uri? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +55,26 @@ class HomeActivity : ComponentActivity() {
 
         setContentView(R.layout.activity_home)
 
-        showBeginButton()     //调用microphone
-        showPhotoButton()    //调用camera
+        // 初始化底部导航栏控件
+        mBottomNavigationView = findViewById(R.id.bottomNavigationView)
+
+        // 默认选中首页
+        selectedFragment(0)
+
+        // 设置点击事件
+        mBottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home1 -> selectedFragment(0)
+                R.id.discover1 -> selectedFragment(1)
+                R.id.mine1 -> selectedFragment(2)
+                else -> false
+            }
+            true
+        }
+
+        // 调用功能
+        showBeginButton() // 调用microphone
+        showPhotoButton() // 调用camera
 
         takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
@@ -65,7 +95,51 @@ class HomeActivity : ComponentActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+
     }
+
+    //选择fragment
+    private fun selectedFragment(position: Int) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        hideFragment(fragmentTransaction)
+
+        when (position) {
+            0 -> {
+                if (mHomeFragment == null) {
+                    mHomeFragment = HomeFragment()
+                    fragmentTransaction.add(R.id.content, mHomeFragment!!)
+                } else {
+                    fragmentTransaction.show(mHomeFragment!!)
+                }
+            }
+            1 -> {
+                if (mDiscoverFragment == null) {
+                    mDiscoverFragment = DiscoverFragment()
+                    fragmentTransaction.add(R.id.content, mDiscoverFragment!!)
+                } else {
+                    fragmentTransaction.show(mDiscoverFragment!!)
+                }
+            }
+            2 -> {
+                if (mMineFragment == null) {
+                    mMineFragment = MineFragment()
+                    fragmentTransaction.add(R.id.content, mMineFragment!!)
+                } else {
+                    fragmentTransaction.show(mMineFragment!!)
+                }
+            }
+        }
+        // 提交
+        fragmentTransaction.commit()
+    }
+    //隐藏界面
+    private fun hideFragment(fragmentTransaction: FragmentTransaction) {
+        mHomeFragment?.let { fragmentTransaction.hide(it) }
+        mDiscoverFragment?.let { fragmentTransaction.hide(it) }
+        mMineFragment?.let { fragmentTransaction.hide(it) }
+    }
+
 
     //fun for camera
     private fun showBeginButton(){
