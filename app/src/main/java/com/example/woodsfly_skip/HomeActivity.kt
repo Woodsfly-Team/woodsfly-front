@@ -41,6 +41,8 @@ class HomeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        setContentView(R.layout.activity_home)
+
         showBeginButton()     //调用microphone
         showPhotoButton()    //调用camera
 
@@ -57,7 +59,6 @@ class HomeActivity : ComponentActivity() {
                 uploadPhoto(it)
             }
         }
-        setContentView(R.layout.activity_home)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.home)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
