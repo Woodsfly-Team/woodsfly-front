@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.TextView
+import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,7 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 
-class WelcomeActivity : AppCompatActivity() {
+class WelcomeActivity : ComponentActivity() {
     private lateinit var tvCountdown: TextView
     private lateinit var countDownTimer: CountDownTimer
     private val timeLeftInMillis: Long = 3000 // Set to 3 seconds
