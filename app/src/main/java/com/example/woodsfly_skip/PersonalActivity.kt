@@ -1,5 +1,6 @@
 package com.example.woodsfly_skip
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -64,9 +65,9 @@ class PersonalActivity : AppCompatActivity() {
 
 
     private fun openGallery() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-            ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
-            != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        != android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
             requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_PERMISSION_CODE)
         } else {
             pickImageFromGallery()
@@ -84,6 +85,7 @@ class PersonalActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun pickImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         if (intent.resolveActivity(packageManager) != null) {
@@ -91,6 +93,7 @@ class PersonalActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
@@ -117,9 +120,7 @@ class PersonalActivity : AppCompatActivity() {
         if (cursor != null) {
             path = column_index?.let { cursor.getString(it) }.toString()
         }
-        if (cursor != null) {
-            cursor.close()
-        }
+        cursor?.close()
         return path
     }
 

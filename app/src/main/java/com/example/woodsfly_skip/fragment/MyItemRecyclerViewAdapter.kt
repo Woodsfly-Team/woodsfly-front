@@ -1,10 +1,10 @@
 package com.example.woodsfly_skip.fragment
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.woodsfly_skip.databinding.FragmentHomeBinding
 import com.example.woodsfly_skip.fragment.placeholder.PlaceholderContent.PlaceholderItem
 
 /**
@@ -41,6 +41,28 @@ class MyItemRecyclerViewAdapter(
 
         override fun toString(): String {
             return super.toString() + " '" + contentView.text + "'"
+        }
+    }
+
+}
+
+class FragmentHomeBinding {
+    val content: TextView
+        get() {
+            TODO()
+        }
+    val root: View
+        get() {
+            TODO()
+        }
+    val itemNumber: TextView
+        get() {
+            TODO()
+        }
+
+    companion object {
+        fun inflate(from: LayoutInflater?, parent: ViewGroup, b: Boolean): FragmentHomeBinding {
+            TODO("Not yet implemented")
         }
     }
 
