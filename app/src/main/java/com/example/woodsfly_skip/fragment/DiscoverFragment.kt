@@ -38,10 +38,11 @@ class DiscoverFragment : Fragment() {
     private val searchApiService: SearchApiService = retrofit.create(SearchApiService::class.java)
     private lateinit var lifecycleScope: CoroutineScope // 定义协程作用域
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-
+        
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_discover, container, false)
@@ -105,4 +106,5 @@ class DiscoverFragment : Fragment() {
             }
         }
     }
+
 }
