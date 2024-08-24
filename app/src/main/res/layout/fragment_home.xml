@@ -1,20 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/background_mui"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.HomeFragment"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_home"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+
+        <LinearLayout
+            android:id="@+id/function"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="310dp"
+            >
+
+            <Button
+                android:id="@+id/bt_camera"
+                android:layout_width="170dp"
+                android:layout_height="92dp"
+                android:layout_marginTop="44dp"
+                android:layout_marginLeft="3dp"
+                android:background="@drawable/camera"
+                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
+                />
+
+            <Button
+                android:id="@+id/microphone"
+                android:layout_width="160dp"
+                android:layout_height="96dp"
+                android:layout_marginTop="46dp"
+                android:layout_marginLeft="4dp"
+
+                android:background="@drawable/miccrophone"
+                android:backgroundTint="@null"
+                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textview_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="鸟界趣闻"
+            android:textColor="#084B0A"
+            android:textSize="20sp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@id/function"
+            android:layout_marginTop="28dp"
+            />
+
+        <LinearLayout
+            android:layout_below="@id/textview_home"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="0dp"
+            >
+
+            <Button
+                android:id="@+id/bt3"
+                android:layout_width="160dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/redbird"
+                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                >
+
+                <Button
+                    android:id="@+id/bt4"
+                    android:layout_width="160dp"
+                    android:layout_height="88dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginLeft="25dp"
+                    android:background="@drawable/birdrigh"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
+                    />
+
+                <Button
+                    android:id="@+id/bt5"
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="25dp"
+                    android:background="@drawable/yellowbird"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
 
     <TextView
-        android:id="@+id/item_number"
-        android:layout_width="wrap_content"
+        android:id="@+id/text_home"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
-
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
-</FrameLayout>
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

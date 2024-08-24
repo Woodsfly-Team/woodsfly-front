@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "woodsfly_skip"
+rootProject.name = "woodsfly"
 include(":app")
  
