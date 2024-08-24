@@ -139,6 +139,7 @@ data class Define( // 定义Define数据类，用于接收鸟类定义信息
     val bird_genus: String
 )
 
+
 // Response Data Class for Search Details
 data class SearchDetailsResponse( // 定义SearchDetailsResponse数据类，用于接收响应数据
     val code: Int,
@@ -157,6 +158,7 @@ data class BirdDetails( // 定义BirdDetails数据类，用于接收鸟类详细
     val level: String,
     val link: String
 )
+
 
 // Simple Adapter for AutoCompleteTextView
 class SimpleAdapter(context: Context, private val birdInfoList: List<BirdInfo>) : ArrayAdapter<BirdInfo>(context, android.R.layout.simple_dropdown_item_1line, birdInfoList) { // 定义SimpleAdapter类，继承自ArrayAdapter
