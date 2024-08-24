@@ -8,14 +8,25 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
+/**
+ * 个人登录活动类，提供用户登录功能。
+ *
+ * 用户可以通过输入账号和密码进行登录，登录信息与SharedPreferences中保存的信息进行比对。
+ *
+ * @author zoeyyyy-git
+ * @Time 2024-08-21
+ */
 class PersonalLoginActivity : AppCompatActivity() {
 
     private lateinit var accountEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var loginButton: Button
     private lateinit var sharedPreferences: SharedPreferences
-
+    /**
+     * 活动创建时调用的方法，初始化界面和事件监听。
+     *
+     * @param savedInstanceState 保存的实例状态，可用于恢复活动状态
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
