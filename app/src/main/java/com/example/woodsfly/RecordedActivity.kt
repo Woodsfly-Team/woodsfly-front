@@ -22,6 +22,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.woodsfly.ui.home.en
+import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -38,6 +39,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.Base64
 import okhttp3.Response
+import java.net.URLEncoder
 
 class RecordedActivity : AppCompatActivity() {
 
@@ -98,8 +100,9 @@ class RecordedActivity : AppCompatActivity() {
                 stopRecord()
             }
             btn_upload.setOnClickListener {
+                btn_upload.isEnabled=false
                 val agdafg = RecordXieChengBase64()
-                agdafg.uploadRecord(audioFileAbsolutePath.toString())
+                agdafg.uploadRecord(audioFileAbsolutePath.toString(),2,1)
                 // uploadRecord2(audioFileAbsolutePath.toString())
             }
         }
@@ -186,6 +189,7 @@ class RecordedActivity : AppCompatActivity() {
     private fun stopRecord() {
         val btn_start: Button = findViewById(R.id.btn_start)
         val btn_stop: Button = findViewById(R.id.btn_stop)
+        val btn_upload: Button = findViewById(R.id.btn_upload)
         try {
             recorder!!.stop()
             recorder!!.release()
@@ -195,7 +199,7 @@ class RecordedActivity : AppCompatActivity() {
         }
         btn_start.isEnabled = true
         btn_stop.isEnabled = false
-
+        btn_upload.isEnabled=true
     }
 
     override fun onRequestPermissionsResult(
@@ -227,7 +231,7 @@ class RecordedActivity : AppCompatActivity() {
 
                 mCurrentAudioUrl = data.data.toString()
                 val agdafg = RecordXieChengBase64()
-                agdafg.uploadRecord(audioFileAbsolutePath.toString())
+                agdafg.uploadRecord(audioFileAbsolutePath.toString(),2,1)
             }
         }
     }
@@ -270,35 +274,42 @@ class RecordXieChengBase64 : AppCompatActivity(), CoroutineScope by MainScope() 
 
     private val client = OkHttpClient()
 
-    fun uploadRecord(filePath: String) {
+    fun uploadRecord(filePath: String,tag: Int, user_id: Int) {
         launch(Dispatchers.IO) {
             try {
                 val file = File(filePath)
                 val fileContent = file.readBytes() // 读取文件字节
                 val base64String = Base64.getEncoder().encodeToString(fileContent) // 转换为Base64字符串
 
-                val base64Body = RequestBody.create("text/plain".toMediaType(), base64String)
-                //val body = MultipartBody.Builder()
-                //    .setType(MultipartBody.FORM)
-                //    .addFormDataPart("record_file", file.name, base64Body)
-                //    .build()
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("file", base64String)
+                jsonObject.addProperty("tag", tag)
+                jsonObject.addProperty("user_id", user_id)
+
+                val mediaType = "application/json; charset=utf-8".toMediaType()
+                val body = RequestBody.create(mediaType, jsonObject.toString())
+
+                val url = "http://10.0.2.2:4523/m1/4938021-4595545-default/searchbird"
+                val encodedTag = URLEncoder.encode(tag.toString(), "UTF-8")
+                val encodedUserId = URLEncoder.encode(user_id.toString(), "UTF-8")
+                val requestUrl = "$url/?tag=$encodedTag&user_id=$encodedUserId"
 
                 val request = Request.Builder()
-                    .url("http://10.0.2.2:4523/m1/4938021-4595545-default/searchbird/")
-                    .post(base64Body)
+                    .url(requestUrl)
+                    .post(body)
                     .addHeader("User-Agent", "Apifox/1.0.0 (https://apifox.com)")
-                    .addHeader("Accept", "*/*")
                     .addHeader("Host", "10.0.2.2:4523")
                     .addHeader("Connection", "keep-alive")
+                    .addHeader("Accept", "application/json")
                     .build()
 
-                val response : Response = client.newCall(request).execute()
+                val response = client.newCall(request).execute()
 
                 if (response.isSuccessful) {
                     Log.d("Upload Success", "File uploaded successfully")
                     println("成功")
-                    val jsonString = response.body.toString()
-                    Log.d("JSON Response", jsonString);
+                    val responseString = response.body?.string() // 安全获取响应体
+                    Log.d("JSON Response", responseString ?: "No response body")
                 } else {
                     Log.e("Upload Failure", "Failed to upload file")
                 }
@@ -313,7 +324,6 @@ class RecordXieChengBase64 : AppCompatActivity(), CoroutineScope by MainScope() 
             }
         }
     }
-
     override fun onDestroy() {
         super.onDestroy()
         job.cancel() // 取消所有协程
