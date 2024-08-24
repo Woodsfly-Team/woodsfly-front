@@ -51,7 +51,15 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.Base64
 
+//全局变量，麦克风功能后续页面转换
 var en = 0
+
+/**
+ * 搜索结果页面
+ *
+ * @contributor Karenbluu、   、
+ * @Time 2024-08-16
+ */
 
 class HomeFragment : Fragment() {
 

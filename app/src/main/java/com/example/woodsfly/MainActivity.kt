@@ -10,6 +10,14 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.woodsfly.databinding.ActivityMainBinding
 
+/**
+ * v-3.0.1
+ * 主页面整体规划，导航栏部署
+ *
+ * @author Karenbluu
+ * @Time 2024-08-23
+ */
+
 class MainActivity : AppCompatActivity() {
 
 private lateinit var binding: ActivityMainBinding
@@ -25,7 +33,9 @@ private lateinit var binding: ActivityMainBinding
 
         val navView: BottomNavigationView = binding.navView
 
+        //页面布局，主要功能设置规划
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
+
         // Passing each menu ID as a set of Ids because each
 
         // menu should be considered as top level destinations.
