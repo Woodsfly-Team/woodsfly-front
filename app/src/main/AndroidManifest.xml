@@ -24,6 +24,7 @@
         android:roundIcon="@mipmap/ic_nlt_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.Woodsfly"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
         <meta-data
             android:name="com.google.android.actions"
