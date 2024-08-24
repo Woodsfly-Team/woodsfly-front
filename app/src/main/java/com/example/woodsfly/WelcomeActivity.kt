@@ -13,6 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
+/**
+ * 欢迎界面，进入app延时三秒。
+ *
+ * @author Karenbluu
+ * @Time 2024-08-17
+ */
 
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var tvCountdown: TextView
@@ -39,6 +45,7 @@ class WelcomeActivity : AppCompatActivity() {
         startCountdown();
     }
 
+    //计时函数
     private fun startCountdown() {
         countDownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -46,7 +53,7 @@ class WelcomeActivity : AppCompatActivity() {
                 val secondsLeft = (millisUntilFinished / 1000).toInt();
                 tvCountdown.text = secondsLeft.toString();
             }
-
+            //计时结束，跳转
             override fun onFinish() {
                 startActivity(Intent(this@WelcomeActivity, MainActivity::class.java))
                 finish();
