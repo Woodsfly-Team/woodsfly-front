@@ -29,8 +29,8 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/bg_person" />
@@ -131,12 +131,14 @@
                 app:srcCompat="@drawable/ic_arrow_right" />
 
         </LinearLayout>
+
         <ImageView
             android:id="@+id/imageView5"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:src="@drawable/personal_pic"
             android:layout_marginBottom="700dp"
+            android:layout_marginTop="100dp"
             tools:ignore="MissingConstraints" />
     </LinearLayout>
 
