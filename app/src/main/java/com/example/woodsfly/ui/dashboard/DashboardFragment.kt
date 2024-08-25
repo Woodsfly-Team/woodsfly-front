@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.woodsfly.data.BirdDetails
 import com.example.woodsfly.databinding.FragmentDashboardBinding
 
 
@@ -28,7 +29,36 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 class DashboardFragment : Fragment() {
+    companion object {
+        val globalStringList: MutableList<BirdDetails> = mutableListOf()
+    }
 
+    private var _binding: FragmentDashboardBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+
+
+
+
+
+        return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     private lateinit var searchEditText: AutoCompleteTextView
     private lateinit var apiService: ApiService
 
@@ -166,5 +196,6 @@ class SimpleAdapter(context: Context, private val birdInfoList: List<BirdInfo>) 
         val view = super.getView(position, convertView, parent) // 调用父类的getView方法
         view.findViewById<TextView>(android.R.id.text1).text = birdInfoList[position].chinese_name // 设置下拉列表项的文本
         return view // 返回视图
+
     }
 }
