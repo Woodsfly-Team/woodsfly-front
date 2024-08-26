@@ -1,5 +1,5 @@
-package com.example.woodsfly
 
+package com.example.woodsfly
 
 import android.content.Context
 import android.content.Intent
@@ -50,8 +50,6 @@ class PersonalHistoryActivity : AppCompatActivity() {
     }
 
 
-
-
     inner class HistoryAdapter(
         private val records: List<BirdDetails>,
         private val context: Context,
@@ -84,6 +82,4 @@ class PersonalHistoryActivity : AppCompatActivity() {
         }
     }
 }
-
-
 
