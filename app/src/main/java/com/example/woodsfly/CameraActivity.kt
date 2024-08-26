@@ -33,7 +33,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.woodsfly.R
 import com.google.gson.JsonObject
-import io.reactivex.internal.util.HalfSerializer.onComplete
+import java.io.FileOutputStream
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -41,8 +41,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
-import java.net.URLEncoder
 
 
 @Suppress("DEPRECATION")
@@ -120,7 +120,6 @@ class CameraActivity : ComponentActivity() {
         }
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -129,9 +128,6 @@ class CameraActivity : ComponentActivity() {
             // 处理选择的音频文件
         }
     }
-
-
-
 
     private fun showPhotoOptions() {
         val options = arrayOf("拍照", "从图库中选择")
@@ -170,21 +166,18 @@ class CameraActivity : ComponentActivity() {
             .show()
     }//设置权限
 
-
     private fun capturePhoto() {
         try {
             val uri = createImageUri()
             imageUri = uri
             takePictureLauncher.launch(uri)
-            uploadPhoto(uri, true)  // 上传相机拍摄的图片
+//            uploadPhoto(uri, true)  // 上传相机拍摄的图片
         } catch (e: Exception) {
             // 捕获和处理可能的异常
             e.printStackTrace()
-            //Toast.makeText(this, "无法打开相机:${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "无法打开相机:${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
-
-
 
     private fun pickPhotoFromGallery() {
         pickImageLauncher.launch("image/*")
@@ -212,7 +205,6 @@ class CameraActivity : ComponentActivity() {
 
         return uri!!
     }
-
 
     private fun uploadPhoto(uri: Uri, isCameraImage: Boolean) {
         val contentResolver = this.contentResolver
@@ -247,7 +239,6 @@ class CameraActivity : ComponentActivity() {
         }
     }
 
-
     private fun getPathFromUri(uri: Uri): String {
         var path = ""
         contentResolver.query(uri, null, null, null, null)?.use { cursor ->
@@ -269,17 +260,22 @@ class ImageXieChengBase64 : AppCompatActivity(), CoroutineScope by MainScope() {
     fun uploadRecord(image64: String,tag: Int, user_id: Int,onComplete: (String?) -> Unit) {
         launch(Dispatchers.IO) {
             try {
+                val imageBytes = Base64.decode(image64, Base64.DEFAULT)
 
-                val jsonObject = JsonObject()
-                jsonObject.addProperty("bird_info", image64)
-                jsonObject.addProperty("tag", tag)
-                jsonObject.addProperty("user_id", user_id)
-                val mediaType = "application/json; charset=utf-8".toMediaType()
-                val body = RequestBody.create(mediaType, jsonObject.toString())
+                // 创建临时文件来保存解码后的 JPEG 数据
+                val tempFile = File.createTempFile("upload_image", ".jpg")
+                val fos = FileOutputStream(tempFile)
+                fos.write(imageBytes)
+                fos.flush()
+                fos.close()
 
+                val mediaType = "image/jpeg".toMediaType()
+                val body = tempFile.asRequestBody(mediaType)
+                val url = "http://10.0.2.2:4523/m1/4938021-4595545-default/predict"
+                val fullUrl = "$url?tag=$tag&user_id=$user_id"
 
                 val request = Request.Builder()
-                    .url("http://59.110.123.151/searchbird/?bird_info=$image64&tag=1&user_id=1")
+                    .url(fullUrl)
                     .post(body)
                     .build()
 
