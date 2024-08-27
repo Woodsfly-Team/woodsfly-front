@@ -1,10 +1,12 @@
 package com.example.woodsfly
 
+import android.Manifest
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.READ_MEDIA_AUDIO
 import android.Manifest.permission.RECORD_AUDIO
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,8 +22,10 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.woodsfly.ui.home.en
+import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -29,15 +33,21 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okio.Buffer
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.util.Base64
-import okhttp3.Response
+import java.net.URLEncoder
+import java.nio.charset.Charset
+
+//跳转结果页，1查询，2拍照，3录音
+var json_en: Int = 0
 
 class RecordedActivity : AppCompatActivity() {
 
@@ -47,48 +57,43 @@ class RecordedActivity : AppCompatActivity() {
     private var mCurrentAudioUrl: String? = null  // 当前选择的音频文件
     private var audioFilePath: String? = null; // 选择本地文件的文件路径
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        setContentView(R.layout.activity_recorded)
 
-        if(en==0){
-            recordPrepare()
-        }else if(en==1){
-            pickRecordFromGallery()
-        }
-
-
+        showRecordOptions()
 
     }
 
+    //录音和本地上传的选项
+    private fun showRecordOptions() {
+        val options = arrayOf("录音", "从文件选择")
+        AlertDialog.Builder(this)
+            .setTitle("Select an option")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> {
+                        setContentView(R.layout.activity_recorded)
+                        recordPrepare()
+                    }
 
+                    1 -> pickRecordFromGallery()
+                }
+            }
+            .show()
+    }
+
+
+    //准备录音，权限，按钮
     private fun recordPrepare() {
 
         val btn_start: Button = findViewById(R.id.btn_start)
         val btn_stop: Button = findViewById(R.id.btn_stop)
         val btn_upload: Button = findViewById(R.id.btn_upload)
 
-        if (ContextCompat.checkSelfPermission(
-                this,
-                RECORD_AUDIO
-            ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                this,
-                WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissions(arrayOf<String>(RECORD_AUDIO), 1)
-        } else if (ContextCompat.checkSelfPermission(
-                this,
-                WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                this,
-                WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissions(arrayOf<String>(WRITE_EXTERNAL_STORAGE), 2)
+        if (ContextCompat.checkSelfPermission(this, RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(RECORD_AUDIO), 1)
         } else {
             getSDCardFile()
             btn_start.setOnClickListener {
@@ -98,14 +103,27 @@ class RecordedActivity : AppCompatActivity() {
                 stopRecord()
             }
             btn_upload.setOnClickListener {
-                val agdafg = RecordXieChengBase64()
-                agdafg.uploadRecord(audioFileAbsolutePath.toString())
-                // uploadRecord2(audioFileAbsolutePath.toString())
+                btn_upload.isEnabled = false
+                // 实例化 UploadHelper，传入回调
+                val uploadHelper = RecordXieChengBase64()
+                uploadHelper.uploadRecord(audioFileAbsolutePath.toString(), 2, 1,"amr") { jsonString ->
+                    // 上传成功回调
+                    if (jsonString != null) {
+                        // 启动 ResultActivity，并传递 jsonData
+                        val bundle = Bundle()
+                        bundle.putString("JSON_DATA_3", jsonString)
+                        val intent = Intent(this, ResultActivity::class.java)
+                        intent.putExtras(bundle)
+                        startActivity(intent)
+                    } else {
+                        Log.e("Upload Failure", "Failed to upload file")
+                    }
+                }
             }
         }
     }
 
-
+    //选择音频文件
     @SuppressLint("Range")
     private fun pickRecordFromGallery() {
         if (Build.VERSION.SDK_INT >= 6.0) {
@@ -143,7 +161,7 @@ class RecordedActivity : AppCompatActivity() {
         }
     }
 
-
+    //手动录音的文件路径
     private fun getSDCardFile() {
         val tv_path: TextView = findViewById(R.id.tv_path)
         if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
@@ -152,27 +170,21 @@ class RecordedActivity : AppCompatActivity() {
         }
     }
 
-
-    //开始录音
+    // 开始录音
     private fun startRecord() {
         val btn_start: Button = findViewById(R.id.btn_start)
         val btn_stop: Button = findViewById(R.id.btn_stop)
 
         recorder = MediaRecorder()
 
-        //设置音频源
         recorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
-        //设置输出格式
         recorder!!.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT)
-        //设置音频编码
         recorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
 
         try {
             val file = File.createTempFile("录音_", ".amr", sdcardfile)
-            //设置录音保存路径
             audioFileAbsolutePath = file.absolutePath
             recorder!!.setOutputFile(file)
-            //准备和启动录制音频
             recorder!!.prepare()
             recorder!!.start()
         } catch (e: IOException) {
@@ -182,10 +194,12 @@ class RecordedActivity : AppCompatActivity() {
         btn_stop.isEnabled = true
     }
 
-    //停止录音
+    // 停止录音
     private fun stopRecord() {
         val btn_start: Button = findViewById(R.id.btn_start)
         val btn_stop: Button = findViewById(R.id.btn_stop)
+        val btn_upload: Button = findViewById(R.id.btn_upload)
+
         try {
             recorder!!.stop()
             recorder!!.release()
@@ -193,11 +207,12 @@ class RecordedActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        btn_start.isEnabled = true
+        btn_start.isEnabled = false
         btn_stop.isEnabled = false
-
+        btn_upload.isEnabled = true
     }
 
+    //权限请求的回调
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -216,9 +231,7 @@ class RecordedActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-
-
-    //选择本地音频的回调函数
+    // 选择音频文件的回调函数
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 4 && resultCode == RESULT_OK) {
@@ -226,13 +239,24 @@ class RecordedActivity : AppCompatActivity() {
                 audioFilePath = getFilePath(this, data.data!!) // 文件路径
 
                 mCurrentAudioUrl = data.data.toString()
-                val agdafg = RecordXieChengBase64()
-                agdafg.uploadRecord(audioFileAbsolutePath.toString())
+                val uploadHelper = RecordXieChengBase64()
+                uploadHelper.uploadRecord(audioFilePath.toString(), 2, 1,"mpeg") { jsonString ->
+                    // 上传成功回调
+                    if (jsonString != null) {
+                        val bundle = Bundle()
+                        bundle.putString("JSON_DATA_3", jsonString)
+                        val intent = Intent(this, ResultActivity::class.java)
+                        intent.putExtras(bundle)
+                        startActivity(intent)
+                    } else {
+                        Log.e("Upload Failure", "Failed to upload file")
+                    }
+                }
             }
         }
     }
 
-
+    //本地音频的路径
     private fun getFilePath(context: Context, uri: Uri): String? {
         try {
             val returnCursor: Cursor? =
@@ -261,61 +285,65 @@ class RecordedActivity : AppCompatActivity() {
         return null
     }
 }
-
-
-class RecordXieChengBase64 : AppCompatActivity(), CoroutineScope by MainScope() {
-    // 使用主线程的CoroutineScope，注意在Activity销毁时取消协程
-    private val job = SupervisorJob()
-    val coroutineScope = CoroutineScope(Dispatchers.Main + job)
+/*
+ *接口设置
+ */
+class RecordXieChengBase64 {
 
     private val client = OkHttpClient()
 
-    fun uploadRecord(filePath: String) {
-        launch(Dispatchers.IO) {
+    fun uploadRecord(filePath: String, tag: Int, user_id: Int,audioType : String, onComplete: (String?) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 val file = File(filePath)
                 val fileContent = file.readBytes() // 读取文件字节
-                val base64String = Base64.getEncoder().encodeToString(fileContent) // 转换为Base64字符串
+                val filePart = MultipartBody.Part.createFormData(
+                    "file", // 服务器端接收文件的字段名
+                    file.name,
+                    RequestBody.create("audio/$audioType".toMediaType(),fileContent) // 假设音频文件是MPEG格式
+                )
+                // 创建 MultipartBody.Builder 并添加音频文件部分
+                val builder = MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addPart(filePart)
 
-                val base64Body = RequestBody.create("text/plain".toMediaType(), base64String)
-                //val body = MultipartBody.Builder()
-                //    .setType(MultipartBody.FORM)
-                //    .addFormDataPart("record_file", file.name, base64Body)
-                //    .build()
+                //val jsonObject = JsonObject()
+                //jsonObject.addProperty("bird_info", "base64String")
+                //jsonObject.addProperty("tag", tag)
+                //jsonObject.addProperty("user_id", user_id)
+
+                //val mediaType = "application/json; charset=utf-8".toMediaType()
+                //val body = RequestBody.create(mediaType, jsonObject.toString())
+
+                val url = "http://10.0.2.2:4523/m1/4938021-4595545-default/predict?tag=2&user_id=1"
 
                 val request = Request.Builder()
-                    .url("http://10.0.2.2:4523/m1/4938021-4595545-default/searchbird/")
-                    .post(base64Body)
-                    .addHeader("User-Agent", "Apifox/1.0.0 (https://apifox.com)")
-                    .addHeader("Accept", "*/*")
-                    .addHeader("Host", "10.0.2.2:4523")
-                    .addHeader("Connection", "keep-alive")
+                    .url(url)
+                    .post(builder.build())
+                    .addHeader("User-Agent", "Apify/1.0.0 (https://apifox.com)")
                     .build()
 
-                val response : Response = client.newCall(request).execute()
+                val response = client.newCall(request).execute()
 
                 if (response.isSuccessful) {
                     Log.d("Upload Success", "File uploaded successfully")
-                    println("成功")
-                    val jsonString = response.body.toString()
-                    Log.d("JSON Response", jsonString);
+                    json_en=3
+                    val jsonString = response.body?.string()
+                    withContext(Dispatchers.Main) {
+                        onComplete(jsonString) // 回调上传结果
+                    }
                 } else {
-                    Log.e("Upload Failure", "Failed to upload file")
-                }
-
-                withContext(Dispatchers.Main) {
-                    // 在这里处理UI更新或结果展示
+                    Log.e("Upload unSuccess", "失败了")
+                    withContext(Dispatchers.Main) {
+                        onComplete(null) // 上传失败时回调空
+                    }
                 }
             } catch (e: Exception) {
+                Log.e("Upload Error", e.message ?: "Unknown error")
                 withContext(Dispatchers.Main) {
-                    // 在这里处理异常，例如显示错误信息
+                    onComplete(null) // 出现异常时回调空
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        job.cancel() // 取消所有协程
     }
 }
