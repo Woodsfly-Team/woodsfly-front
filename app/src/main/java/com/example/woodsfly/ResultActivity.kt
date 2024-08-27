@@ -13,16 +13,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.bumptech.glide.Glide
 import com.example.woodsfly.ui.dashboard.SearchDetailsResponse
 import com.google.gson.Gson
 import org.json.JSONObject
 
 /**
- * 搜索结果页面
+ * 搜索结果页面+收藏功能
  *
  * @contributor Karenbluu、zzh0404
- * @Time 2024-08-24
+ * @Time 2024-08-23
  */
 
 class ResultActivity : AppCompatActivity() {
@@ -36,6 +35,8 @@ class ResultActivity : AppCompatActivity() {
         //val jsonStr1 = bundle?.getString("JSON_DATA_1")//搜索
         val jsonStr2 = bundle?.getString("JSON_DATA_2")//拍照
         val jsonStr3 = bundle?.getString("JSON_DATA_3")//录音
+
+        //初始化收藏按键
 
         if(json_en==2){
             parseJson(jsonStr2.toString())
@@ -52,7 +53,7 @@ class ResultActivity : AppCompatActivity() {
         }
     }
 
-    //解析json字符串
+    //解析拍照和录音传来的json字符串
     private fun parseJson(jsonStr: String){
         json_en=0
 
@@ -93,6 +94,7 @@ class ResultActivity : AppCompatActivity() {
         }
     }
 
+    //解析搜索传来的数据
     private fun parseJson_zjy(jsonStr: SearchDetailsResponse){
         json_en=0
 

@@ -14,8 +14,10 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+
 import com.bumptech.glide.Glide
 import com.example.woodsfly.PersonalHistoryActivity
+
 import com.example.woodsfly.PersonalLoginActivity
 import com.example.woodsfly.PersonalSettingsActivity
 import com.example.woodsfly.R
@@ -96,6 +98,10 @@ class NotificationsFragment : Fragment() {
             val intent = Intent(requireContext(), PersonalHistoryActivity::class.java)
             startActivity(intent)
         }
+=======
+        // Set click listener for imageView3
+
+
 
 
         button2.setOnClickListener {
