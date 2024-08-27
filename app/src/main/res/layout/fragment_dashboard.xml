@@ -4,32 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg02"
+    android:background="@drawable/bj20241"
     android:padding="16dp">
 
     <!-- 搜索框 -->
     <!-- 搜索框 -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:layout_width="wrap_content"
+        android:layout_height="49dp"
 
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
 
         <AutoCompleteTextView
             android:id="@+id/searchEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="338dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
-            android:hint="搜索"
-            android:inputType="text"
-            android:imeOptions="actionSearch"/>
+            android:background="@drawable/searchbj"
+            android:hint="     搜索"
+            android:imeOptions="actionSearch"
+            android:inputType="text" />
 
         <ImageView
             android:id="@+id/searchImageView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
             android:src="@drawable/cha01" />
 
         <!--        <Button-->
@@ -42,22 +44,22 @@
     <!-- 第二行：ImageView和TextView -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp">
+        android:layout_height="38dp"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/image01"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/a1" />
+            android:layout_width="51dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/jiangpai" />
 
         <TextView
             android:id="@+id/textViewBirdStar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="鸟界明星"
             android:layout_gravity="center"
+            android:text="鸟界明星"
             android:textSize="18sp" />
     </LinearLayout>
 
@@ -71,15 +73,15 @@
         <!-- 第三行的ImageView -->
         <ImageView
             android:id="@+id/image02"
-            android:layout_width="0dp"
-            android:layout_height="150dp"
+            android:layout_width="22dp"
+            android:layout_height="157dp"
             android:layout_weight="1"
             android:src="@drawable/b1" />
 
         <ImageView
             android:id="@+id/image03"
             android:layout_width="0dp"
-            android:layout_height="150dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:src="@drawable/b2" />
     </LinearLayout>
@@ -91,17 +93,18 @@
         android:layout_marginTop="16dp">
 
         <!-- 第四行的ImageView -->
+
         <ImageView
             android:id="@+id/image04"
-            android:layout_width="0dp"
-            android:layout_height="150dp"
+            android:layout_width="16dp"
+            android:layout_height="160dp"
             android:layout_weight="1"
             android:src="@drawable/b3" />
 
         <ImageView
             android:id="@+id/image05"
             android:layout_width="0dp"
-            android:layout_height="150dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:src="@drawable/b4" />
     </LinearLayout>
@@ -110,48 +113,58 @@
 
     <!-- 第五行的ImageView和TextView -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp">
+        android:layout_width="280dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="22dp"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/image06"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/a2" />
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/niao" />
 
         <TextView
             android:id="@+id/textViewDailyPick"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="  每日精选"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
             android:layout_gravity="center"
             android:gravity="center"
+            android:text=" 每日精选"
             android:textSize="18sp" />
     </LinearLayout>
 
     <!-- 第六行到第八行的ImageView -->
-    <ImageView
-        android:id="@+id/image07"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_gravity="left"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/c1" />
 
-    <ImageView
-        android:id="@+id/image08"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/c2" />
+    <TextView
+        android:id="@+id/textViewImageBackground"
+        android:layout_width="290dp"
+        android:layout_height="63dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/c1"
+        android:drawablePadding="0dp"
+        android:gravity="right"
+        android:paddingLeft="30dp"
+        android:paddingTop="18dp"
+        android:paddingRight="8dp"
+        android:text="你的文本"
+        android:textColor="#000000"
+        android:textSize="12sp" />
 
-    <ImageView
-        android:id="@+id/image09"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/c3" />
-
+    <TextView
+        android:id="@+id/textViewImageBackground2"
+        android:layout_width="294dp"
+        android:layout_height="67dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/c2"
+        android:drawablePadding="0dp"
+        android:gravity="left"
+        android:paddingLeft="8dp"
+        android:paddingTop="18dp"
+        android:paddingRight="6dp"
+        android:text="你的文本"
+        android:textColor="#000000"
+        android:textSize="12sp" />
 </LinearLayout>

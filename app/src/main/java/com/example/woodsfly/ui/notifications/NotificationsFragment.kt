@@ -20,7 +20,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import com.example.woodsfly.PersonalHistoryActivity
 import com.example.woodsfly.PersonalLoginActivity
 import com.example.woodsfly.PersonalSettingsActivity
 import com.example.woodsfly.R
@@ -78,10 +77,7 @@ class NotificationsFragment : Fragment() {
         }
 
         // Set click listener for imageView3
-        imageView3.setOnClickListener {
-            val intent = Intent(requireContext(), PersonalHistoryActivity::class.java)
-            startActivity(intent)
-        }
+
 
         // Set click listener for imageView4
         imageView4.setOnClickListener {

@@ -62,6 +62,7 @@
         <activity
             android:name=".PersonalHistoryActivity"
             android:exported="false" />
+
         <activity
             android:name=".PersonalLoginActivity"
             android:exported="false" />
