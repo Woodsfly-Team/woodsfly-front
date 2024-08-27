@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,6 +14,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import com.example.woodsfly.ui.dashboard.SearchDetailsResponse
 import com.google.gson.Gson
 import org.json.JSONObject
@@ -33,21 +35,26 @@ class ResultActivity : AppCompatActivity() {
         //接收json
         val bundle = intent.extras
         //val jsonStr1 = bundle?.getString("JSON_DATA_1")//搜索
-        val jsonStr2 = bundle?.getString("JSON_DATA_2")//拍照
-        val jsonStr3 = bundle?.getString("JSON_DATA_3")//录音
+        val jsonStr2 = bundle?.getString("JSON_DATA_2")//拍照数据
+        val jsonStr3 = bundle?.getString("JSON_DATA_3")//录音数据
+        val imagePath1 = intent.getStringExtra("imageFile_1")//搜索传的图片路径
+        val imagePath2 = intent.getStringExtra("imageFile_2")//拍照传的图片路径
+        val imagePath3 = intent.getStringExtra("imageFile_3")//录音传的图片路径
 
         if(json_en==2){
             parseJson(jsonStr2.toString())
+            loadImageFromPath(imagePath2.toString())
         }else if(json_en==3){
             parseJson(jsonStr3.toString())
+            loadImageFromPath(imagePath3.toString())
         }else if (json_en==1 && bundle != null && bundle.containsKey("JSON_DATA_1")) {
             // 从 Bundle 中获取 JSON 字符串
             val responseJson = bundle.getString("JSON_DATA_1")
-
             // 使用 Gson 反序列化 JSON 字符串为 SearchDetailsResponse 对象
             val gson = Gson()
             val response: SearchDetailsResponse = gson.fromJson(responseJson, SearchDetailsResponse::class.java)
             parseJson_zjy(response)
+            loadImageFromPath(imagePath1.toString())
         }
     }
 
@@ -67,7 +74,6 @@ class ResultActivity : AppCompatActivity() {
         val chineseName = dataObject.getString("chinese_name")
         val englishName = dataObject.getString("english_name")
         val incidence = dataObject.getString("incidence")
-        val imageUrl = dataObject.getString("image")
 
         // 获取 "define" 里的嵌套字段
         val defineObject = dataObject.getJSONObject("define")
@@ -80,8 +86,6 @@ class ResultActivity : AppCompatActivity() {
         val introduction = dataObject.getString("introduction")
         val level = dataObject.getString("level")
         val link = dataObject.getString("link")
-
-        loadImageFromUrl(imageUrl)
 
         textLayout(chineseName, englishName, incidence, birdOrder, birdFamily, birdGenus, habitat, introduction, level)
 
@@ -107,7 +111,7 @@ class ResultActivity : AppCompatActivity() {
         val chineseName = dataObject.chinese_name
         val englishName = dataObject.english_name
         val incidence = dataObject.incidence
-        val imageUrl = dataObject.image
+        //val imageUrl = dataObject.image
 
         // 获取 "define" 里的嵌套字段
         val defineObject = dataObject.define
@@ -121,7 +125,6 @@ class ResultActivity : AppCompatActivity() {
         val level = dataObject.level
         val link = dataObject.link
 
-        loadImageFromUrl(imageUrl)
 
         textLayout(chineseName, englishName, incidence, birdOrder, birdFamily, birdGenus, habitat, introduction, level)
 
@@ -132,16 +135,8 @@ class ResultActivity : AppCompatActivity() {
         }
     }
 
-    //控件赋值
-    private fun textLayout(chineseName:String,
-                           englishName:String,
-                           incidence:String,
-                           birdOrder:String,
-                           birdFamily:String,
-                           birdGenus:String,
-                           habitat:String,
-                           introduction:String,
-                           level:String){
+    //TextView控件赋值
+    private fun textLayout(chineseName:String, englishName:String, incidence:String, birdOrder:String, birdFamily:String, birdGenus:String, habitat:String, introduction:String, level:String){
         var chineseName0 : TextView = findViewById(R.id.chineseName)
         var englishName0 : TextView = findViewById(R.id.englishName)
         var incidence0 : TextView = findViewById(R.id.incidence)
@@ -161,17 +156,17 @@ class ResultActivity : AppCompatActivity() {
     }
 
     //加载网络图片
-    private fun loadImageFromUrl(url: String) {
-        // 使用合适的库来加载网络图片，例如 Picasso 或 Glide
-        val responseString =url
-        // 将 Base64 字符串解码为字节数组
-        val byteArray = Base64.decode(responseString, Base64.DEFAULT)
-        // 将字节数组转换成 Bitmap 对象
-        val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-        // 现在 bitmap 包含了图片数据，你可以将其显示在 ImageView 或保存为文件
-        var imageUrl : ImageView = findViewById(R.id.imageUrl)
-        imageUrl.setImageBitmap(bitmap) // 显示在 ImageView 上
-
+    private fun loadImageFromPath(imagePath: String) {
+        var imageView : ImageView = findViewById(R.id.imageUrl)
+        if (!imagePath.isNullOrBlank()) {
+            // 使用 Glide 加载图片
+            Glide.with(this)
+                .load(imagePath) // 直接传入图片路径
+                .into(imageView)
+        } else {
+            // 图片路径不存在时的处理逻辑
+            Log.e("ResultActivity", "Image path is null or blank")
+        }
     }
 
     //进入百度链接
