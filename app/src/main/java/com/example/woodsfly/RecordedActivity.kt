@@ -33,6 +33,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -45,7 +46,7 @@ import java.util.Base64
 import java.net.URLEncoder
 import java.nio.charset.Charset
 
-
+//跳转结果页，1查询，2拍照，3录音
 var json_en: Int = 0
 
 class RecordedActivity : AppCompatActivity() {
@@ -65,6 +66,7 @@ class RecordedActivity : AppCompatActivity() {
 
     }
 
+    //录音和本地上传的选项
     private fun showRecordOptions() {
         val options = arrayOf("录音", "从文件选择")
         AlertDialog.Builder(this)
@@ -83,27 +85,16 @@ class RecordedActivity : AppCompatActivity() {
     }
 
 
-
+    //准备录音，权限，按钮
     private fun recordPrepare() {
 
         val btn_start: Button = findViewById(R.id.btn_start)
         val btn_stop: Button = findViewById(R.id.btn_stop)
         val btn_upload: Button = findViewById(R.id.btn_upload)
 
-        if (ContextCompat.checkSelfPermission(this, RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(RECORD_AUDIO), 1)
-        }else if (ContextCompat.checkSelfPermission(this, RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissions(arrayOf(WRITE_EXTERNAL_STORAGE), 2)
-        }else if (ContextCompat.checkSelfPermission(this, RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissions(arrayOf(RECORD_AUDIO), 1)
-        }
-        else {
+        } else {
             getSDCardFile()
             btn_start.setOnClickListener {
                 startRecord()
@@ -115,7 +106,7 @@ class RecordedActivity : AppCompatActivity() {
                 btn_upload.isEnabled = false
                 // 实例化 UploadHelper，传入回调
                 val uploadHelper = RecordXieChengBase64()
-                uploadHelper.uploadRecord(audioFileAbsolutePath.toString(), 2, 1) { jsonString ->
+                uploadHelper.uploadRecord(audioFileAbsolutePath.toString(), 2, 1,"amr") { jsonString ->
                     // 上传成功回调
                     if (jsonString != null) {
                         // 启动 ResultActivity，并传递 jsonData
@@ -132,6 +123,7 @@ class RecordedActivity : AppCompatActivity() {
         }
     }
 
+    //选择音频文件
     @SuppressLint("Range")
     private fun pickRecordFromGallery() {
         if (Build.VERSION.SDK_INT >= 6.0) {
@@ -169,6 +161,7 @@ class RecordedActivity : AppCompatActivity() {
         }
     }
 
+    //手动录音的文件路径
     private fun getSDCardFile() {
         val tv_path: TextView = findViewById(R.id.tv_path)
         if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
@@ -219,6 +212,7 @@ class RecordedActivity : AppCompatActivity() {
         btn_upload.isEnabled = true
     }
 
+    //权限请求的回调
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -246,7 +240,7 @@ class RecordedActivity : AppCompatActivity() {
 
                 mCurrentAudioUrl = data.data.toString()
                 val uploadHelper = RecordXieChengBase64()
-                uploadHelper.uploadRecord(audioFilePath.toString(), 2, 1) { jsonString ->
+                uploadHelper.uploadRecord(audioFilePath.toString(), 2, 1,"mpeg") { jsonString ->
                     // 上传成功回调
                     if (jsonString != null) {
                         val bundle = Bundle()
@@ -262,6 +256,7 @@ class RecordedActivity : AppCompatActivity() {
         }
     }
 
+    //本地音频的路径
     private fun getFilePath(context: Context, uri: Uri): String? {
         try {
             val returnCursor: Cursor? =
@@ -290,54 +285,55 @@ class RecordedActivity : AppCompatActivity() {
         return null
     }
 }
-
+/*
+ *接口设置
+ */
 class RecordXieChengBase64 {
 
     private val client = OkHttpClient()
 
-    fun uploadRecord(filePath: String, tag: Int, user_id: Int, onComplete: (String?) -> Unit) {
+    fun uploadRecord(filePath: String, tag: Int, user_id: Int,audioType : String, onComplete: (String?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val file = File(filePath)
                 val fileContent = file.readBytes() // 读取文件字节
-                val base64String = Base64.getEncoder().encodeToString(fileContent) // 转换为Base64字符串
+                val filePart = MultipartBody.Part.createFormData(
+                    "file", // 服务器端接收文件的字段名
+                    file.name,
+                    RequestBody.create("audio/$audioType".toMediaType(),fileContent) // 假设音频文件是MPEG格式
+                )
+                // 创建 MultipartBody.Builder 并添加音频文件部分
+                val builder = MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addPart(filePart)
 
-                val jsonObject = JsonObject()
-                jsonObject.addProperty("bird_info", "base64String")
-                jsonObject.addProperty("tag", tag)
-                jsonObject.addProperty("user_id", user_id)
+                //val jsonObject = JsonObject()
+                //jsonObject.addProperty("bird_info", "base64String")
+                //jsonObject.addProperty("tag", tag)
+                //jsonObject.addProperty("user_id", user_id)
 
-                val mediaType = "application/json; charset=utf-8".toMediaType()
-                val body = RequestBody.create(mediaType, jsonObject.toString())
+                //val mediaType = "application/json; charset=utf-8".toMediaType()
+                //val body = RequestBody.create(mediaType, jsonObject.toString())
 
-                val url = "http://59.110.123.151/searchbird/?bird_info=base64String&tag=2&user_id=1"
-                //val encodedTag = URLEncoder.encode(tag.toString(), "UTF-8")
-                //val encodedUserId = URLEncoder.encode(user_id.toString(), "UTF-8")
-                val requestUrl = "$url/?bird_info=&tag=&user_id="
-                val bodyContent = body.toString()
-                val buffer = Buffer()
-                body.writeTo(buffer)
-                val requestBodyAsString = buffer.readString(Charset.forName("UTF-8"))
+                val url = "http://59.110.123.151:80/predict?tag=2&user_id=1"
 
-// 打印 RequestBody 的实际内容
-                Log.d("RequestBody", requestBodyAsString)
                 val request = Request.Builder()
                     .url(url)
-                    .post(body)
+                    .post(builder.build())
                     .addHeader("User-Agent", "Apify/1.0.0 (https://apifox.com)")
                     .build()
 
                 val response = client.newCall(request).execute()
 
                 if (response.isSuccessful) {
-                    Log.d("Upload Success", "File uploaded successfully with parameters: bird_info = ${jsonObject["bird_info"]}, tag = ${jsonObject["tag"]}, user_id = ${jsonObject["user_id"]}")
+                    Log.d("Upload Success", "File uploaded successfully")
                     json_en=3
                     val jsonString = response.body?.string()
                     withContext(Dispatchers.Main) {
                         onComplete(jsonString) // 回调上传结果
                     }
                 } else {
-                    Log.e("Upload unSuccess", bodyContent)
+                    Log.e("Upload unSuccess", "失败了")
                     withContext(Dispatchers.Main) {
                         onComplete(null) // 上传失败时回调空
                     }
