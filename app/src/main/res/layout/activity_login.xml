@@ -72,4 +72,13 @@
         app:layout_constraintTop_toBottomOf="@+id/til_password"
         android:text="登录"
         />
+
+    <TextView
+        android:id="@+id/bt_register"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="260dp"
+        android:text="请先注册"
+        android:textColor="@color/ps_color_394a3e" />
 </LinearLayout>
