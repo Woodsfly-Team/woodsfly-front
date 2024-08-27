@@ -36,6 +36,51 @@ import retrofit2.http.Query
 /**搜索页面完善中……*/
 
 class DashboardFragment : Fragment() {
+    object globalStringList : List<BirdDetails> {
+        override val size: Int
+            get() = TODO("Not yet implemented")
+
+        override fun get(index: Int): BirdDetails {
+            TODO("Not yet implemented")
+        }
+
+        override fun isEmpty(): Boolean {
+            TODO("Not yet implemented")
+        }
+
+        override fun iterator(): Iterator<BirdDetails> {
+            TODO("Not yet implemented")
+        }
+
+        override fun listIterator(): ListIterator<BirdDetails> {
+            TODO("Not yet implemented")
+        }
+
+        override fun listIterator(index: Int): ListIterator<BirdDetails> {
+            TODO("Not yet implemented")
+        }
+
+        override fun subList(fromIndex: Int, toIndex: Int): List<BirdDetails> {
+            TODO("Not yet implemented")
+        }
+
+        override fun lastIndexOf(element: BirdDetails): Int {
+            TODO("Not yet implemented")
+        }
+
+        override fun indexOf(element: BirdDetails): Int {
+            TODO("Not yet implemented")
+        }
+
+        override fun containsAll(elements: Collection<BirdDetails>): Boolean {
+            TODO("Not yet implemented")
+        }
+
+        override fun contains(element: BirdDetails): Boolean {
+            TODO("Not yet implemented")
+        }
+
+    }
 
     // 定义DashboardFragment类，继承自Fragment
 
