@@ -19,10 +19,10 @@ import com.google.gson.Gson
 import org.json.JSONObject
 
 /**
- * 搜索结果页面
+ * 搜索结果页面+收藏功能
  *
  * @contributor Karenbluu、zzh0404
- * @Time 2024-08-24
+ * @Time 2024-08-23
  */
 
 class ResultActivity : AppCompatActivity() {
@@ -36,6 +36,8 @@ class ResultActivity : AppCompatActivity() {
         //val jsonStr1 = bundle?.getString("JSON_DATA_1")//搜索
         val jsonStr2 = bundle?.getString("JSON_DATA_2")//拍照
         val jsonStr3 = bundle?.getString("JSON_DATA_3")//录音
+
+        //初始化收藏按键
 
         if(json_en==2){
             parseJson(jsonStr2.toString())
