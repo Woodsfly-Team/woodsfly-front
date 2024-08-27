@@ -30,9 +30,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Woodsfly"
         tools:targetApi="31">
+        <activity
+            android:name=".introduce.IntroduceActivity3"
+            android:exported="false" />
+        <activity
+            android:name=".introduce.IntroduceActivity2"
+            android:exported="false" />
+        <activity
+            android:name=".introduce.IntroduceActivity1"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
             android:value="true" />
+
         <activity
             android:name=".CameraActivity"
             android:exported="false" />
