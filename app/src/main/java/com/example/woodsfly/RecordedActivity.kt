@@ -315,7 +315,7 @@ class RecordXieChengBase64 {
                 //val mediaType = "application/json; charset=utf-8".toMediaType()
                 //val body = RequestBody.create(mediaType, jsonObject.toString())
 
-                val url = "http://10.0.2.2:4523/m1/4938021-4595545-default/predict?tag=2&user_id=1"
+                val url = "http://59.110.123.151:80/predict?tag=2&user_id=1"
 
                 val request = Request.Builder()
                     .url(url)
