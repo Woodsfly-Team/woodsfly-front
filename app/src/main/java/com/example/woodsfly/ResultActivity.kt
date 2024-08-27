@@ -13,7 +13,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.bumptech.glide.Glide
 import com.example.woodsfly.ui.dashboard.SearchDetailsResponse
 import com.google.gson.Gson
 import org.json.JSONObject
@@ -52,7 +51,7 @@ class ResultActivity : AppCompatActivity() {
         }
     }
 
-    //解析json字符串
+    //解析拍照和录音传来的json字符串
     private fun parseJson(jsonStr: String){
         json_en=0
 
@@ -93,6 +92,7 @@ class ResultActivity : AppCompatActivity() {
         }
     }
 
+    //解析搜索传来的数据
     private fun parseJson_zjy(jsonStr: SearchDetailsResponse){
         json_en=0
 
