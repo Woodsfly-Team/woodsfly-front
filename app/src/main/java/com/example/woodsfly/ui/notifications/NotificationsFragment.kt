@@ -98,7 +98,7 @@ class NotificationsFragment : Fragment() {
             val intent = Intent(requireContext(), PersonalHistoryActivity::class.java)
             startActivity(intent)
         }
-=======
+
         // Set click listener for imageView3
 
 

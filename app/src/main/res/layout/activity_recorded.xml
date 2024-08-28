@@ -11,24 +11,84 @@
         android:id="@+id/btn_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="开始" />
+        android:text="开始录音" />
 
     <Button
         android:id="@+id/btn_stop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
-        android:text="停止" />
+        android:text="停止录音" />
+
+    <Button
+        android:id="@+id/btn_play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="开始播放" />
+
+    <Button
+        android:id="@+id/btn_playend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="停止播放" />
+
+    <Button
+        android:id="@+id/btn_crop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="裁剪" />
 
     <Button
         android:id="@+id/btn_upload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
-        android:text="上传" />
+        android:text="上传录音" />
+
     <TextView
         android:id="@+id/tv_path"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center" /> <!-- 使文本在 TextView 中居中 -->
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp" />
+
+    <!-- 起始时间显示 -->
+    <TextView
+        android:id="@+id/startTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Time: 00:00:00"
+        android:textSize="18sp" />
+
+    <!-- SeekBar 用于选择裁剪时间 -->
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
+
+    <!-- 结束时间显示 -->
+    <TextView
+        android:id="@+id/endTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Time: 00:00:00"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btn_crop_end"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="结束裁剪" />
+
+
 </LinearLayout>
