@@ -20,10 +20,10 @@ import com.google.gson.Gson
 import org.json.JSONObject
 
 /**
- * 搜索结果页面
+ * 搜索结果页面+收藏功能
  *
  * @contributor Karenbluu、zzh0404
- * @Time 2024-08-24
+ * @Time 2024-08-23
  */
 
 class ResultActivity : AppCompatActivity() {
@@ -40,6 +40,8 @@ class ResultActivity : AppCompatActivity() {
         val imagePath1 = intent.getStringExtra("imageFile_1")//搜索传的图片路径
         val imagePath2 = intent.getStringExtra("imageFile_2")//拍照传的图片路径
         val imagePath3 = intent.getStringExtra("imageFile_3")//录音传的图片路径
+
+        //初始化收藏按键
 
         if(json_en==2){
             parseJson(jsonStr2.toString())

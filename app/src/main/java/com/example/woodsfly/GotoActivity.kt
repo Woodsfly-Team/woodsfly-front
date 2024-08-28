@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 
+
 class GotoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,5 +25,4 @@ class GotoActivity : AppCompatActivity() {
             .into(textView_image)
         textView_title.text = intent.getStringExtra("title")
     }
-
 }
