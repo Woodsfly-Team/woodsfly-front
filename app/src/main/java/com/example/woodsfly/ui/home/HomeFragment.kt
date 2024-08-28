@@ -1,75 +1,73 @@
 package com.example.woodsfly.ui.home
 
-
-import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.woodsfly.R
 import com.example.woodsfly.RecordedActivity
 import com.example.woodsfly.CameraActivity
+import com.example.woodsfly.PersonalHistoryActivity
 import com.example.woodsfly.databinding.FragmentHomeBinding
-
-
-//全局变量，麦克风功能后续页面转换
-var en = 0
+import com.example.woodsfly.introduce.IntroduceActivity1
+import com.example.woodsfly.introduce.IntroduceActivity2
+import com.example.woodsfly.introduce.IntroduceActivity3
 
 /**
- * 搜索结果页面
+ * v-3.0.1
+ * 主页布局、点击事件
  *
- * @contributor Karenbluu、   、
- * @Time 2024-08-16
+ * @author Karenbluu
+ * @Time 2024-08-15
  */
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
-    private var columnCount = 1
-
-
-    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        // 调用功能
-        val microphone: Button = view.findViewById(R.id.microphone)
-        val bt_camera: Button = view.findViewById(R.id.bt_camera)
-
-        microphone.setOnClickListener {
+        // 按钮点击事件
+        binding.bt1.setOnClickListener {
+            val intent = Intent(requireContext(), IntroduceActivity1::class.java)
+            startActivity(intent)
+        }
+        // 按钮点击事件
+        binding.bt2.setOnClickListener {
+            val intent = Intent(requireContext(), IntroduceActivity2::class.java)
+            startActivity(intent)
+        }
+        // 按钮点击事件
+        binding.bt3.setOnClickListener {
+            val intent = Intent(requireContext(), IntroduceActivity3::class.java)
+            startActivity(intent)
+        }
+        // 麦克风 点击事件
+        binding.microphone.setOnClickListener {
             val intent = Intent(requireContext(), RecordedActivity::class.java)
             startActivity(intent)
         }
-
-        bt_camera.setOnClickListener {
+        // 相机 点击事件
+        binding.btCamera.setOnClickListener {
             val intent = Intent(requireContext(), CameraActivity::class.java)
             startActivity(intent)
         }
-
-        return view
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-    //fun for microphone
-
-
-
 }
-

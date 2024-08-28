@@ -1,6 +1,7 @@
 
 package com.example.woodsfly
 
+
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -48,6 +49,8 @@ class PersonalHistoryActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
     }
+
+
 
 
     inner class HistoryAdapter(
