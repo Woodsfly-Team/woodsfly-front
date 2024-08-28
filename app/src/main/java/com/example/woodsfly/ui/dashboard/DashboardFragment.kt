@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.woodsfly.data.BirdDetails
 import com.example.woodsfly.databinding.FragmentDashboardBinding
 import android.text.Editable
 import android.text.TextWatcher
@@ -33,53 +32,9 @@ import retrofit2.http.Query
 
 
 class DashboardFragment : Fragment() {
-    object globalStringList : List<BirdDetails> {
-        override val size: Int
-            get() = TODO("Not yet implemented")
-
-        override fun get(index: Int): BirdDetails {
-            TODO("Not yet implemented")
-        }
-
-        override fun isEmpty(): Boolean {
-            TODO("Not yet implemented")
-        }
-
-        override fun iterator(): Iterator<BirdDetails> {
-            TODO("Not yet implemented")
-        }
-
-        override fun listIterator(): ListIterator<BirdDetails> {
-            TODO("Not yet implemented")
-        }
-
-        override fun listIterator(index: Int): ListIterator<BirdDetails> {
-            TODO("Not yet implemented")
-        }
-
-        override fun subList(fromIndex: Int, toIndex: Int): List<BirdDetails> {
-            TODO("Not yet implemented")
-        }
-
-        override fun lastIndexOf(element: BirdDetails): Int {
-            TODO("Not yet implemented")
-        }
-
-        override fun indexOf(element: BirdDetails): Int {
-            TODO("Not yet implemented")
-        }
-
-        override fun containsAll(elements: Collection<BirdDetails>): Boolean {
-            TODO("Not yet implemented")
-        }
-
-        override fun contains(element: BirdDetails): Boolean {
-            TODO("Not yet implemented")
-        }
-
+    companion object {
+        val globalStringList: MutableList<BirdDetails> = mutableListOf()
     }
-    // 定义DashboardFragment类，继承自Fragment
-
     private lateinit var searchEditText: AutoCompleteTextView // 声明一个AutoCompleteTextView变量，用于搜索输入
     private lateinit var apiService: ApiService // 声明一个ApiService变量，用于网络请求
     private lateinit var searchImageView: ImageView
