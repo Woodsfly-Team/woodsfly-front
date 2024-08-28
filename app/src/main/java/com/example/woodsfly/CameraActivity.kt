@@ -41,9 +41,12 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import org.json.JSONObject
+import java.util.UUID
 
 
 @Suppress("DEPRECATION")
@@ -207,41 +210,20 @@ class CameraActivity : ComponentActivity() {
     }
 
     private fun uploadPhoto(uri: Uri, isCameraImage: Boolean) {
-        val contentResolver = this.contentResolver
-        val mimeType = contentResolver.getType(uri)
-        val imageData = getDataFromUri(contentResolver, uri)
-        val base64Image = imageData?.let { Base64.encodeToString(it, Base64.DEFAULT) }
-
-        if (base64Image != null) {
             val imageProcessor = ImageXieChengBase64()
-            imageProcessor.uploadRecord(base64Image, 1, 1) { imagePath ->
-                if (imagePath != null) {
-                    // 调用第二个接口获取图片文件
-                    imageProcessor.downloadImage(imagePath) { fileData ->
-                        if (fileData != null) {
-                            val bundle = Bundle().apply {
-                                putByteArray("IMAGE_FILE_DATA", fileData)
-                            }
-                            // 在这里处理获取到的图片文件
-                            Log.d("Download Success", "Image file received")
-                            // 例如，将文件传递到 ResultActivity
-                            bundle.putByteArray("IMAGE_FILE_DATA", fileData)
-                            val intent = Intent(this, ResultActivity::class.java).apply {
-                                putExtras(bundle)
-                            }
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            Log.e("Download Failure", "Failed to download image file")
-                        }
-                    }
+            imageProcessor.uploadRecord(getPathFromUri(uri), 1, 1) { jsonString, imageFile ->
+                // 上传成功回调
+                if (jsonString != null && imageFile != null) {
+                    val bundle = Bundle()
+                    bundle.putString("JSON_DATA_2", jsonString)
+                    bundle.putString("imageFile_2", imageFile.absolutePath)
+                    val intent = Intent(this, ResultActivity::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
                 } else {
-                    Log.e("Upload Failure", "Failed to upload image and get path")
+                    Log.e("Upload Failure", "Failed to upload file")
                 }
             }
-        } else {
-            Log.e("Base64 Encoding Failure", "Failed to encode image to Base64")
-        }
     }
 
 
@@ -270,107 +252,85 @@ class CameraActivity : ComponentActivity() {
 
 class ImageXieChengBase64 : AppCompatActivity(), CoroutineScope by MainScope() {
     // 使用主线程的CoroutineScope，注意在Activity销毁时取消协程
-    private val job = SupervisorJob()
-    override val coroutineContext = Dispatchers.Main + job
-
-    private val client = OkHttpClient()
-
-    fun uploadRecord(image64: String,tag: Int, user_id: Int,onComplete: (String?) -> Unit) {
-        launch(Dispatchers.IO) {
+    private val client1 = OkHttpClient()
+    private val client2 = OkHttpClient()
+    fun uploadRecord(image64: String,tag: Int, user_id: Int, onComplete: (String?, File?) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
-                val imageBytes = Base64.decode(image64, Base64.DEFAULT)
+                val file = File(image64)
+                // 创建 RequestBody，用于封装文件数据
+                val fileRequestBody = RequestBody.create("image/jpg".toMediaType(), file)
 
-                // 创建临时文件来保存解码后的 JPEG 数据
-                val tempFile = File.createTempFile("upload_image", ".jpg")
-                FileOutputStream(tempFile).use { fos ->
-                    fos.write(imageBytes)
-                }
+                // 创建 MultipartBody.Part，用于封装文件和参数名
+                val filePart = MultipartBody.Part.createFormData("file", file.name, fileRequestBody)
 
-                //val fos = FileOutputStream(tempFile)
-                //fos.write(imageBytes)
-                //fos.flush()
-                //fos.close()
-
-                val mediaType = "image/jpeg".toMediaType()
-                val body = tempFile.asRequestBody(mediaType)
-                val url = "http://10.0.2.2:4523/m1/4938021-4595545-default/predict"
-                val fullUrl = "$url?tag=$tag&user_id=$user_id"
-
-                val request = Request.Builder()
-                    .url(fullUrl)
-                    .post(body)
+                // 构建 MultipartBody
+                val multipartBody = MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addPart(filePart)
                     .build()
 
-                val response: Response = client.newCall(request).execute()
-                val jsonString = response.body?.string()
+                val url1 = "http://10.0.2.2:4523/m1/4938021-4595545-default/predict?tag=1&user_id=1"
 
-                if (response.isSuccessful) {
-                    Log.d("uploadimage", "Success")
-                    val imagePath = parseImagePathFromResponse(jsonString)
-                    withContext(Dispatchers.Main) {
-                        onComplete(imagePath)
-                    }
-                } else {
-                    Log.e("Upload Failure", "Failed to upload image")
-                    withContext(Dispatchers.Main) {
-                        onComplete(null)
-                    }
-                }
-
-            } catch (e: Exception) {
-                Log.e("uploadimage", "shibai")
-                e.printStackTrace()
-                withContext(Dispatchers.Main) {
-                    // 在这里处理异常，例如显示错误信息
-                }
-            }
-        }
-    }
-    fun downloadImage(imagePath: String, onComplete: (ByteArray?) -> Unit) {
-        launch(Dispatchers.IO) {
-            try {
-                val url = "http://10.0.2.2:4523/m1/4938021-4595545-default/get_image"
-                val fullUrl = "$url?path=$imagePath"
-
-                val request = Request.Builder()
-                    .url(fullUrl)
-                    .get()
+                val request1 = Request.Builder()
+                    .url(url1)
+                    .post(multipartBody)
+                    .addHeader("User-Agent", "Apify/1.0.0 (https://apifox.com)")
                     .build()
 
-                val response: Response = client.newCall(request).execute()
-                val imageBytes = response.body?.bytes()
+                val response1 = client1.newCall(request1).execute()
 
-                if (response.isSuccessful) {
-                    Log.d("Download Success", "Image downloaded successfully")
-                    withContext(Dispatchers.Main) {
-                        onComplete(imageBytes)
+                if (response1.isSuccessful) {
+                    Log.d("Upload Success1", "File uploaded successfully")
+                    json_en = 2
+                    val jsonString = response1.body?.string()
+                    //解析json获取image
+                    val jsonObject = jsonString?.let { JSONObject(it) }
+                    val dataObject = jsonObject?.getJSONObject("data")
+                    val file_id = dataObject?.getInt("image")
+                    //第二次请求
+                    val url2 = "http://10.0.2.2:4523/m1/4938021-4595545-default/image?file_id=$file_id"
+                    val body = RequestBody.create("text/plain".toMediaType(), file_id.toString())
+                    val request2 = Request.Builder()
+                        .url(url2)
+                        .post(body) // 使用 POST 方法
+                        .addHeader("User-Agent", "Apify/1.0.0 (https://apifox.com)")
+                        .build()
+                    // 执行第二个请求并获取图片文件
+                    val response2 = client2.newCall(request2).execute()
+                    if (response2.isSuccessful) {
+                        Log.d("Upload Success6", "图片路径上传成功")
+                        val imageBytes = response2.body?.bytes()
+                        val randomFileName = "image_${UUID.randomUUID()}.jpg"
+                        val imageFile = imageBytes?.let { byteArray ->
+                            File.createTempFile("fugv1", ".jpg").apply {
+                                writeBytes(byteArray) // 使用 'it' 引用 let 块的参数
+                                renameTo(File(parent, randomFileName))
+                            }
+                        }
+                        withContext(Dispatchers.Main) {
+                            // 在主线程上执行 onComplete 回调
+                            onComplete(jsonString, imageFile) // 回调上传结果和图片文件
+                        }
+                    } else {
+                        Log.e("Upload unSuccess", "图片文件请求失败")
+                        withContext(Dispatchers.Main) {
+                            onComplete(null, null) // 图片文件请求失败时回调空
+                        }
                     }
                 } else {
-                    Log.e("Download Failure", "Failed to download image")
+                    Log.e("Upload unSuccess", "tupian文件上传失败")
                     withContext(Dispatchers.Main) {
-                        onComplete(null)
+                        onComplete(null, null) // tupian文件上传失败时回调空
                     }
                 }
             } catch (e: Exception) {
-                Log.e("Download Error", "Exception during download", e)
+                Log.e("Upload Error", e.message ?: "Unknown error")
                 withContext(Dispatchers.Main) {
-                    onComplete(null)
+                    onComplete(null, null) // 出现异常时回调空
                 }
             }
         }
-    }
-
-    private fun parseImagePathFromResponse(jsonString: String?): String? {
-        // 解析 JSON 响应并提取图片路径
-        // 示例：假设响应是 { "path": "/images/123.jpg" }
-        return jsonString?.let {
-            val jsonObject = JSONObject(it)
-            jsonObject.optString("path")
-        }
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        job.cancel() // 取消所有协程
     }
 }
 

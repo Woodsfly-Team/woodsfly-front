@@ -27,16 +27,9 @@ class PersonalHistoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
-
-
     }
-
-
-        recyclerView = findViewById(R.id.recyclerViewHistory)
-        back = findViewById(R.id.back)
-        back.setOnClickListener { finish() }
-    }
-
 
 }
+
+
 
