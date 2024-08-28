@@ -1,6 +1,5 @@
 package com.example.woodsfly
 
-
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -9,7 +8,6 @@ import androidx.activity.enableEdgeToEdge
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
 
 import com.example.woodsfly.ui.dashboard.DashboardFragment
 
@@ -20,7 +18,6 @@ import com.example.woodsfly.ui.dashboard.DashboardFragment
  * @author Karenbluu
  * @Time 2024-08-28
  */
-
 
 class PersonalHistoryActivity : AppCompatActivity() {
 
