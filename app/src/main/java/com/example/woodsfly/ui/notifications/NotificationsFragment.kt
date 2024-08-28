@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,14 +13,12 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-
 import com.bumptech.glide.Glide
 import com.example.woodsfly.PersonalHistoryActivity
-
 import com.example.woodsfly.PersonalLoginActivity
-import com.example.woodsfly.PersonalSettingsActivity
 import com.example.woodsfly.R
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.SelectMimeType
@@ -38,6 +37,7 @@ private val FragmentActivity.RESULT_OK: Any?
     }
 
 class NotificationsFragment : Fragment() {
+    private lateinit var sharedPreferences: SharedPreferences
 
     private lateinit var imageView: ImageView
     private lateinit var imageView2: LinearLayout
@@ -47,7 +47,6 @@ class NotificationsFragment : Fragment() {
     private lateinit var button3: Button
     private lateinit var tv_take_pictures: Button // 拍照按钮
     private lateinit var tv_open_album: Button // 相册按钮
-
 
 
     private val PICK_IMAGE_REQUEST = 1
@@ -63,7 +62,6 @@ class NotificationsFragment : Fragment() {
     }
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -73,7 +71,15 @@ class NotificationsFragment : Fragment() {
         imageView3 = view.findViewById(R.id.imageView3)// 设置个人历史记录点击区域的点击事件，跳转到个人历史记录页面
         button2 = view.findViewById(R.id.button2)// 设置注册/登录按钮的点击事件，跳转到注册/登录页面
         button3 = view.findViewById(R.id.button3)// 设置退出登录按钮的点击事件，跳转到登录页面
-
+        sharedPreferences = requireActivity().getSharedPreferences("AppSettings", MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "")
+        if (user_id?.isEmpty() == true) {
+            button2.setText("注册登录")
+            button2.isEnabled = true
+        } else {
+            button2.setText(user_id)
+            button2.isEnabled = false
+        }
         /**
          * 初始化Fragment中所有的视图控件
          *
@@ -98,8 +104,10 @@ class NotificationsFragment : Fragment() {
             val intent = Intent(requireContext(), PersonalHistoryActivity::class.java)
             startActivity(intent)
         }
-=======
+
+
         // Set click listener for imageView3
+
 
 
 
@@ -112,11 +120,30 @@ class NotificationsFragment : Fragment() {
 
 
         button3.setOnClickListener {
+
+            with(sharedPreferences.edit()) {
+                putString("account", "")
+                putString("password", "")
+                putString("user_id", "")
+                apply()
+            }
+
             val intent = Intent(requireContext(), PersonalLoginActivity::class.java)
             startActivity(intent)
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val account = sharedPreferences.getString("account", "")
+        if (account?.isEmpty() == true) {
+            button2.setText("注册/登录")
+            button2.isEnabled = true
+        } else {
+            button2.setText(account)
+            button2.isEnabled = false
+        }
+    }
 
     /**
      * 显示权限请求对话框，让用户选择拍照或从相册选择图片

@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="10dp"
-    android:background="@drawable/login_bg"
     android:layout_gravity="center_horizontal"
+    android:background="@drawable/login_bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp"
     tools:context=".PersonalLoginActivity">
     <!--    <com.google.android.material.textfield.TextInputLayout-->
     <!--        android:id="@+id/til_account"-->
@@ -29,11 +29,11 @@
     <EditText
         android:id="@+id/tie_account"
         android:layout_width="300dp"
-        android:textColorHint="@color/black"
-        android:textColor="@color/black"
-        android:background="@drawable/edit_text_border_green"
         android:layout_height="50dp"
-        android:hint="   请输入账号" />
+        android:background="@drawable/edit_text_border_green"
+        android:hint="   请输入账号"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black" />
     <!--    </com.google.android.material.textfield.TextInputLayout>-->
 
     <!--    <com.google.android.material.textfield.TextInputLayout-->
@@ -52,26 +52,26 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
-        android:textColorHint="@color/black"
-        android:textColor="@color/black"
         android:background="@drawable/edit_text_border_green"
-        android:hint="   请输入密码" />
+        android:hint="   请输入密码"
+        android:inputType="textPassword"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black" />
 
 
     <!--    </com.google.android.material.textfield.TextInputLayout>-->
 
     <Button
         android:id="@+id/bt_login"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/color_green"
+        android:text="登录"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/color_green"
-        app:layout_constraintTop_toBottomOf="@+id/til_password"
-        android:text="登录"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/til_password" />
 
     <TextView
         android:id="@+id/bt_register"
