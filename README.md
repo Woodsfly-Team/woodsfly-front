@@ -21,6 +21,8 @@
    在本地拉取最新的项目代码，切换到 `dev` 分支，新建一个分支 `example`。
 
    ```bash
+   # 同步远端仓库最新进度
+   git fetch
    # 切换到 dev 分支
    git checkout dev
    # 拉取最新代码
