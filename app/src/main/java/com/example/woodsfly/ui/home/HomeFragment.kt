@@ -54,6 +54,7 @@ class HomeFragment : Fragment() {
             val intent = Intent(requireContext(), IntroduceActivity3::class.java)
             startActivity(intent)
         }
+
         // 麦克风 点击事件
         binding.microphone.setOnClickListener {
             val intent = Intent(requireContext(), RecordedActivity::class.java)
