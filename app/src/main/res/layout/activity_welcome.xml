@@ -9,7 +9,7 @@
     tools:context=".WelcomeActivity"
     >
 
-
+    <!-- 倒计时控件 -->
     <androidx.cardview.widget.CardView
         android:layout_width="60dp"
         android:layout_height="50dp"
