@@ -23,7 +23,7 @@ import androidx.core.view.WindowInsetsCompat
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var tvCountdown: TextView
     private lateinit var countDownTimer: CountDownTimer
-    private val timeLeftInMillis: Long = 3000 // Set to 3 seconds
+    private val timeLeftInMillis: Long = 3000  // 设置三秒进入主界面
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,10 +38,10 @@ class WelcomeActivity : AppCompatActivity() {
             insets
         }
 
-        // Initialize the countdown text view
+        // 初始化倒数计时栏
         tvCountdown = findViewById(R.id.tv_countdown)
 
-        // Start the countdown
+        // 调用计时函数
         startCountdown();
     }
 
