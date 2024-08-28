@@ -10,10 +10,10 @@
     android:background="@drawable/bg111">
 
     <TextView
-        android:id="@+id/historyTextView"
+        android:id="@+id/favoriteItemsTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="浏览记录"
+        android:text="收藏记录"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="160dp"/>

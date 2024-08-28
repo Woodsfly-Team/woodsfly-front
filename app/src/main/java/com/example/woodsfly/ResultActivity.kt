@@ -1,6 +1,7 @@
 package com.example.woodsfly
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.graphics.Color
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
@@ -22,15 +24,24 @@ import org.json.JSONObject
 /**
  * 搜索结果页面+收藏功能
  *
- * @contributor Karenbluu、zzh0404
+ * @contributor Karenbluu zzh0404
  * @Time 2024-08-23
  */
 
 class ResultActivity : AppCompatActivity() {
+
+    private lateinit var sharedPreferences: SharedPreferences
+    private var isFavorited = false // 用于保存收藏状态
+    private lateinit var chineseName: String
+    private lateinit var englishName: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_result)
+
+        // 初始化 SharedPreferences
+        sharedPreferences = getSharedPreferences("AppSettings", MODE_PRIVATE)
 
         //接收json
         val bundle = intent.extras
@@ -41,7 +52,16 @@ class ResultActivity : AppCompatActivity() {
         val imagePath2 = intent.getStringExtra("imageFile_2")//拍照传的图片路径
         val imagePath3 = intent.getStringExtra("imageFile_3")//录音传的图片路径
 
-        //初始化收藏按键
+        // 设置收藏按钮的点击事件,更新收藏记录
+        val star: Button = findViewById(R.id.star)
+
+        // 自动保存浏览记录
+        saveBrowsingHistory(bundle)
+
+        // 收藏按钮事件
+        star.setOnClickListener {
+            toggleFavorite(star)
+        }
 
         if(json_en==2){
             parseJson(jsonStr2.toString())
@@ -58,11 +78,6 @@ class ResultActivity : AppCompatActivity() {
             parseJson_zjy(response)
             loadImageFromPath(imagePath1.toString())
         }
-
-
-
-
-
     }
 
     //解析拍照和录音传来的json字符串
@@ -165,6 +180,8 @@ class ResultActivity : AppCompatActivity() {
         introduction0.text=introduction
         level0.text=level
 
+        // 保存收藏项时使用
+        saveFavoriteItem(chineseName, englishName)
     }
 
     //加载网络图片
@@ -191,5 +208,67 @@ class ResultActivity : AppCompatActivity() {
             // 处理错误，例如提示用户无法打开链接
             Toast.makeText(this, "无法打开链接", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    // 保存浏览记录
+    private fun saveBrowsingHistory(bundle: Bundle?) {
+        val editor = sharedPreferences.edit()
+        val browsingHistory = sharedPreferences.getString("browsing_history", "")?.split("\n")?.toMutableList() ?: mutableListOf()
+
+        // 将新的浏览记录添加到列表头部
+        if (bundle != null && bundle.containsKey("JSON_DATA_1")) {
+            val responseJson = bundle.getString("JSON_DATA_1")
+            val gson = Gson()
+            val response: SearchDetailsResponse = gson.fromJson(responseJson, SearchDetailsResponse::class.java)
+            val chineseName = response.data.chinese_name
+            val englishName = response.data.english_name
+            browsingHistory.add(0, "$chineseName ($englishName)")
+        }
+
+        // 保持最多 20 条浏览记录
+        if (browsingHistory.size > 100) {
+            browsingHistory.removeAt(browsingHistory.size - 1)
+        }
+
+        // 更新浏览记录
+        editor.putString("browsing_history", browsingHistory.joinToString("\n"))
+        editor.apply()
+    }
+
+    // 收藏和取消收藏鸟类
+    private fun toggleFavorite(star: Button) {
+        Log.d("ResultActivity", "toggleFavorite called. isFavorited: $isFavorited")
+        isFavorited = !isFavorited
+        val newBackground = if (isFavorited) R.drawable.collect_button else R.drawable.cha01
+        star.setBackgroundResource(newBackground) // 更改按钮形状
+        Log.d("ResultActivity", "Button background changed. New background: $newBackground")
+        // 确保不调用 finish() 或其他导致 Activity 结束的方法
+    }
+
+    private fun saveFavoriteItem(chineseName: String, englishName: String) {
+        val editor = sharedPreferences.edit()
+        val favorites = sharedPreferences.getString("favorite_items", "")?.split("\n")?.toMutableList() ?: mutableListOf()
+
+        // 将新的收藏记录添加到列表头部
+        favorites.add(0, "$chineseName ($englishName)")
+
+        // 保持最多 20 条收藏记录
+        if (favorites.size > 20) {
+            favorites.removeAt(favorites.size - 1)
+        }
+
+        editor.putString("favorite_items", favorites.joinToString("\n"))
+        editor.apply()
+    }
+
+    private fun removeFavoriteItem(chineseName: String, englishName: String) {
+        val editor = sharedPreferences.edit()
+        val favorites = sharedPreferences.getString("favorite_items", "")?.split("\n")?.toMutableList() ?: mutableListOf()
+
+        // 删除指定的收藏记录
+        favorites.remove("$chineseName ($englishName)")
+
+        editor.putString("favorite_items", favorites.joinToString("\n"))
+        editor.apply()
     }
 }

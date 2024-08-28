@@ -1,6 +1,5 @@
 package com.example.woodsfly.ui.dashboard
 
-
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -11,10 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-
-import com.example.woodsfly.databinding.FragmentDashboardBinding
-
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -34,54 +29,21 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+
+import okhttp3.ResponseBody
+import java.io.File
 /**搜索页面完善中……*/
 
+
+/**
+ * * V-3.0.2
+ * * 搜索布局，接口文件接收
+ * 搜索接口测试，api可用，还没有测试正式环境
+ *
+ * * @author WZL123W3
+ * * @Time 2024-08-28……*/
+
 class DashboardFragment : Fragment() {
-    object globalStringList : List<BirdDetails> {
-        override val size: Int
-            get() = TODO("Not yet implemented")
-
-        override fun get(index: Int): BirdDetails {
-            TODO("Not yet implemented")
-        }
-
-        override fun isEmpty(): Boolean {
-            TODO("Not yet implemented")
-        }
-
-        override fun iterator(): Iterator<BirdDetails> {
-            TODO("Not yet implemented")
-        }
-
-        override fun listIterator(): ListIterator<BirdDetails> {
-            TODO("Not yet implemented")
-        }
-
-        override fun listIterator(index: Int): ListIterator<BirdDetails> {
-            TODO("Not yet implemented")
-        }
-
-        override fun subList(fromIndex: Int, toIndex: Int): List<BirdDetails> {
-            TODO("Not yet implemented")
-        }
-
-        override fun lastIndexOf(element: BirdDetails): Int {
-            TODO("Not yet implemented")
-        }
-
-        override fun indexOf(element: BirdDetails): Int {
-            TODO("Not yet implemented")
-        }
-
-        override fun containsAll(elements: Collection<BirdDetails>): Boolean {
-            TODO("Not yet implemented")
-        }
-
-        override fun contains(element: BirdDetails): Boolean {
-            TODO("Not yet implemented")
-        }
-
-    }
 
     // 定义DashboardFragment类，继承自Fragment
 
@@ -89,17 +51,19 @@ class DashboardFragment : Fragment() {
     private lateinit var apiService: ApiService // 声明一个ApiService变量，用于网络请求
     private lateinit var searchImageView: ImageView// 删除按钮
     // 定义两组要循环显示的字符串数组（每日精选）
-    private val texts1 = arrayOf("我是秃头鹰，也叫Bald Eagle", "我是金翅雀，也叫American Goldfinch", "我是红尾鹰,也叫Red-Tailed Hawk",
+    private val ytexts1 = arrayOf("我是秃头鹰，也叫Bald Eagle", "我是金翅雀，也叫American Goldfinch", "我是红尾鹰,也叫Red-Tailed Hawk",
         "我是绿头鸭，也可以叫我Mallard",
         "我是大蓝鹭，也可以叫我Great Blue Heron","我是雪莉鸫，也可以叫我 Cedar Waxwing","我是冠山雀，也可以叫我Tufted Titmouse",
         "我是普通潜鸟,也可以叫我Common Loon","我是卡罗莱纳雀，也可以叫我Carolina Wren","我是鸻鹬，也可以叫我Killdeer","我是蓝松鸦，也可以叫我Blue Jay", "我是鱼鹰，也可以叫我Osprey", "我是红喉蜂鸟，也可以叫我 Ruby-Throated Hummingbird",
         "我是卡罗莱纳山雀， 也可以叫我 Carolina Chickadee", "我是林鸭，也可以叫我Wood Duck",
         "我是腰带翠鸟，也可以叫我 Belted Kingfisher", "我是白头鹰，也可以叫我Snowy Owl", "我是加拿大鹅，也可以叫我Canadian Goose", "我是烟囱雨燕，也可以叫我Chimney Swift",
         "我是红腹啄木鸟，也可以叫我Red-Bellied Woodpecker" )
-    private val texts2 = arrayOf("我是蓝松鸦，也可以叫我Blue Jay", "我是鱼鹰，也可以叫我Osprey", "我是红喉蜂鸟，也可以叫我 Ruby-Throated Hummingbird",
+    private val ytexts2 = arrayOf("我是蓝松鸦，也可以叫我Blue Jay", "我是鱼鹰，也可以叫我Osprey", "我是红喉蜂鸟，也可以叫我 Ruby-Throated Hummingbird",
         "我是卡罗莱纳山雀，也可以叫我 Carolina Chickadee", "我是林鸭，也可以叫我Wood Duck", "我是歌雀麻雀，也可以叫我Song Sparrow", "我是北部啄木鸟，也可以叫我Northern Flicker", "我是东蓝鸟，也可以叫我Eastern Bluebird","我是东蓝鸟，也可以叫我Eastern Bluebird","我是雕鸮，也可以叫我Great Horned Owl",
         "我是紫金雀，也可以叫我 Purple Finch","我是秃头鹰，也可以叫我Bald Eagle", "我是金翅雀，也可以叫我American Goldfinch","我是红尾鹰，也可以叫我Red-Tailed Hawk", "我是绿头鸭，也可以叫我Mallard","我是大蓝鹭，也可以叫我Great Blue Heron",
         "我是旋木鸟，也可以叫我Baltimore Oriole","我是斑纹枭，也可以叫我 Barred Owl","我是绣眼雀，也可以叫我House Finch","我是美国知更鸟，也可以叫我American Robin","我是北美红雀，也可以叫我Northern Cardinal")
+    val texts1 = ytexts1.map { it.replace("，", "，\n") }
+    val texts2 = ytexts2.map { it.replace("，", "，\n") }
     private var currentTextIndex1 = 0
     private var currentTextIndex2 = 0
     // Handler用于定时任务
@@ -148,7 +112,7 @@ class DashboardFragment : Fragment() {
         // 鸟界明星的四个按钮，因为之前接口可以传输名字，早上测试可以跳转，但是现在是id号，不知道具体id，暂时注释了
         image02.setOnClickListener {
             // 执行点击image02的操作，比如调用搜索方法
-           // searchDetails("夜鹭")
+            // searchDetails("夜鹭")
         }
         image03.setOnClickListener {
             // 执行点击image03的操作
@@ -160,14 +124,14 @@ class DashboardFragment : Fragment() {
         }
         image05.setOnClickListener {
             // 执行点击image05的操作
-          //  searchDetails("珠颈斑鸠")
+            //  searchDetails("珠颈斑鸠")
         }
 
 
 
         // 初始化Retrofit // 初始化网络请求框架
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://apifoxmock.com/m1/4938021-4595545-default/") // 设置Retrofit的baseUrl
+            .baseUrl("http://59.110.123.151:80/") // 设置Retrofit的baseUrl
             .addConverterFactory(GsonConverterFactory.create()) // 添加Gson转换工厂
             .build() // 构建Retrofit实例
 
@@ -201,10 +165,10 @@ class DashboardFragment : Fragment() {
     }
 
     private fun search(query: String) { // 定义search方法，用于搜索
-        Log.d("API_CALL", "Sending search request for: $query")
+        Log.d("API_CALL", "Sending search1 request for: $query")
         apiService.matchInfo(query).enqueue(object : Callback<MatchInfoResponse> { // 调用ApiService的matchInfo方法，并设置回调
             override fun onResponse(call: Call<MatchInfoResponse>, response: Response<MatchInfoResponse>) { // 请求成功时调用
-               Log.d("API", "Response: ${response.body()}") // 打印响应体
+                Log.d("API", "Response: ${response.body()}") // 打印响应体
                 if (response.isSuccessful) { // 如果请求成功
 
                     val suggestions = response.body()?.data // 获取搜索建议
@@ -225,12 +189,12 @@ class DashboardFragment : Fragment() {
     }
 
     private fun searchDetails(query: Int) { // 定义searchDetails方法，用于搜索详细信息
-        Log.d("API_CALL", "Sending search request for: $query")
+        Log.d("API_CALL", "Sending search2 request for: $query")
         apiService.searchBird(query).enqueue(object : Callback<SearchDetailsResponse> { // 调用ApiService的searchBird方法，并设置回调
             override fun onResponse(call: Call<SearchDetailsResponse>, response: Response<SearchDetailsResponse>) { // 请求成功时调用
                 Log.d("API", "Response: ${response.body()}") // 打印响应体
                 if (response.isSuccessful) { // 如果请求成功
-                   // Log.d("Upload Success", bird_id)
+                    //  Log.d("Upload Success",bird_id)
                     val details : SearchDetailsResponse? = response.body()// 获取详细信息
                     if (details != null) {
                         val gson = Gson()
@@ -243,12 +207,14 @@ class DashboardFragment : Fragment() {
                         // 将详情数据放入 Bundle，这里以字符串形式存储，实际也可以序列化对象
                         bundle.putString("JSON_DATA_1", responseJson)
                         // 将 Bundle 放入 Intent
-                        intent.putExtras(bundle)
+                        downloadImage(details.data.image) { imagePath ->
+                            bundle.putString("imageFile_1", imagePath)
+                            intent.putExtras(bundle)
 
-                        // 启动 ResultActivity
-                        startActivity(intent)
-                    }
-                } else {
+                            // 启动 ResultActivity
+                            startActivity(intent)
+                        }
+                    } }else {
                     Log.e("Upload Failure", "Failed to upload file")
                     Toast.makeText(requireContext(), "Search Error1: ${response.message()}", Toast.LENGTH_SHORT).show() // 显示搜索错误信息
                 }
@@ -259,15 +225,47 @@ class DashboardFragment : Fragment() {
             }
         })
     }
+    private fun downloadImage(image: Int, callback: (String) -> Unit) {
+        Log.d("API_CALL", "Sending search3 request for: $image")
+        val call = apiService.downloadImage(image)
+        call.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.d("API_CALL", "id发送成功")
+                    // 处理下载的图片
+                    val file = createTempFile(requireContext(), "image_")
+                    response.body()?.byteStream().use { inputStream ->
+                        file.outputStream().use { outputStream ->
+                            inputStream?.copyTo(outputStream, 8192)
+                        }
+                    }
+                    callback(file.absolutePath)
+                } else {
+                    Toast.makeText(requireContext(), "Image download failed1: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                t.printStackTrace()
+                Toast.makeText(requireContext(), "Image download failed2", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+    private fun createTempFile(context: Context, prefix: String): File {
+        val storageDir: File? = context.externalCacheDir
+        return File.createTempFile(prefix, ".jpg", storageDir)
+    }
 }
 
- // 定义API服务接口
+// 定义API服务接口
 interface ApiService {
-    @GET("search?bird_name=")//搜索匹配接口，返回搜索列表
+    @GET("search")//搜索匹配接口，返回搜索列表
     fun matchInfo(@Query("bird_name") bird_name: String): Call<MatchInfoResponse>
 
-    @POST("search/?bird_id=")//搜索接口。返回详细信息
-        fun searchBird(@Query("bird_id") bird_id: Int): Call<SearchDetailsResponse>
+    @POST("search")//搜索接口。返回详细信息
+    fun searchBird(@Query("bird_id") bird_id: Int): Call<SearchDetailsResponse>
+    @POST("image") // 根据接口文档，这里使用 POST 请求
+    fun downloadImage(@Query("file_id") file_id: Int): Call<ResponseBody>
 }
 
 // Response Data Class for Match Info // 定义MatchInfoResponse数据类，用于接收响应数据
@@ -298,10 +296,11 @@ data class SearchDetailsResponse( // 定义SearchDetailsResponse数据类
 )
 
 data class BirdDetails( // 定义BirdDetails数据类，用于接收鸟类详细信息
+    val bird_id:Int,
     val chinese_name: String,
     val english_name: String,
     val incidence: String,
-    val image: String,
+    val image: Int,
     val define: Define,
     val habitat: String,
     val introduction: String,
@@ -317,4 +316,3 @@ class SimpleAdapter(context: Context, private val birdInfoList: List<BirdInfo>) 
         return view // 返回视图
     }
 }
-

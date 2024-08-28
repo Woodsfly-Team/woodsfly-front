@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.example.woodsfly.PersonalHistoryActivity
 import com.example.woodsfly.PersonalLoginActivity
 import com.example.woodsfly.R
+import com.example.woodsfly.StarHistoryActivity
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.entity.LocalMedia
@@ -27,7 +28,7 @@ import com.luck.picture.lib.interfaces.OnResultCallbackListener
 
 /**
  * 通知界面的Fragment，用于展示和处理应用内的通知功能
- * @author zoeyyyy-git
+ * @contributor zoeyyyy-git karen_bluu
  * @date 2024.8.27
  */
 
@@ -37,6 +38,7 @@ private val FragmentActivity.RESULT_OK: Any?
     }
 
 class NotificationsFragment : Fragment() {
+
     private lateinit var sharedPreferences: SharedPreferences
 
     private lateinit var imageView: ImageView
@@ -63,12 +65,17 @@ class NotificationsFragment : Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        // 初始化 SharedPreferences
+        sharedPreferences = requireActivity().getSharedPreferences("AppSettings", MODE_PRIVATE)
+
         super.onViewCreated(view, savedInstanceState)
 
         // 初始化视图
         imageView = view.findViewById(R.id.imageView) // 设置头像图片控件的点击事件，弹出权限请求对话框
         imageView2 = view.findViewById(R.id.imageView2)// 设置客服联系方式点击区域的点击事件，显示客服信息提示
         imageView3 = view.findViewById(R.id.imageView3)// 设置个人历史记录点击区域的点击事件，跳转到个人历史记录页面
+        imageView4 = view.findViewById(R.id.imageView4)// 设置收藏记录点击区域的点击事件，跳转到收藏记录页面
         button2 = view.findViewById(R.id.button2)// 设置注册/登录按钮的点击事件，跳转到注册/登录页面
         button3 = view.findViewById(R.id.button3)// 设置退出登录按钮的点击事件，跳转到登录页面
         sharedPreferences = requireActivity().getSharedPreferences("AppSettings", MODE_PRIVATE)
@@ -104,12 +111,14 @@ class NotificationsFragment : Fragment() {
             val intent = Intent(requireContext(), PersonalHistoryActivity::class.java)
             startActivity(intent)
         }
-
-
         // Set click listener for imageView3
 
 
-
+        imageView4.setOnClickListener {
+            val intent = Intent(requireContext(), StarHistoryActivity::class.java)
+            startActivity(intent)
+        }
+        // Set click listener for imageView3
 
 
         button2.setOnClickListener {
