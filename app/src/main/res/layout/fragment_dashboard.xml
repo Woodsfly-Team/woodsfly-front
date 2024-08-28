@@ -112,6 +112,9 @@
     <!-- 以此类推，为image06到image09添加ImageView -->
 
     <!-- 第五行的ImageView和TextView -->
+
+    <!-- 第六行到第八行的ImageView -->
+
     <LinearLayout
         android:layout_width="280dp"
         android:layout_height="37dp"
@@ -120,21 +123,19 @@
 
         <ImageView
             android:id="@+id/image06"
-            android:layout_width="60dp"
+            android:layout_width="42dp"
             android:layout_height="match_parent"
             android:src="@drawable/niao" />
 
         <TextView
             android:id="@+id/textViewDailyPick"
-            android:layout_width="100dp"
-            android:layout_height="45dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:text=" 每日精选"
+            android:gravity="center_horizontal"
+            android:text="每日精选"
             android:textSize="18sp" />
     </LinearLayout>
-
-    <!-- 第六行到第八行的ImageView -->
 
     <TextView
         android:id="@+id/textViewImageBackground"
@@ -144,13 +145,13 @@
         android:layout_marginTop="18dp"
         android:background="@drawable/c1"
         android:drawablePadding="0dp"
-        android:gravity="right"
+        android:gravity="center_horizontal"
         android:paddingLeft="30dp"
-        android:paddingTop="18dp"
+        android:paddingTop="10dp"
         android:paddingRight="8dp"
         android:text="你的文本"
         android:textColor="#000000"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/textViewImageBackground2"
@@ -161,10 +162,10 @@
         android:background="@drawable/c2"
         android:drawablePadding="0dp"
         android:gravity="left"
-        android:paddingLeft="8dp"
-        android:paddingTop="18dp"
+        android:paddingLeft="45dp"
+        android:paddingTop="10dp"
         android:paddingRight="6dp"
         android:text="你的文本"
         android:textColor="#000000"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 </LinearLayout>
