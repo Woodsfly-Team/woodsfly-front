@@ -47,6 +47,7 @@ import android.media.MediaMetadataRetriever
 import android.media.MediaMuxer
 import android.widget.SeekBar
 import java.nio.ByteBuffer
+import java.util.UUID
 
 //跳转结果页，1查询，2拍照，3录音
 var json_en: Int = 0
@@ -582,7 +583,7 @@ class RecordXieChengBase64 {
                     val dataObject = jsonObject?.getJSONObject("data")
                     val file_id = dataObject?.getInt("image")
                     //第二次请求
-                    val url2 = "http://59.110.123.151:80/image?file_id=1"
+                    val url2 = "http://59.110.123.151:80/image?file_id=$file_id"
                     val body = RequestBody.create("text/plain".toMediaType(), file_id.toString())
                     val request2 = Request.Builder()
                         .url(url2)
@@ -594,9 +595,11 @@ class RecordXieChengBase64 {
                     if (response2.isSuccessful) {
                         Log.d("Upload Success6", "图片路径上传成功")
                         val imageBytes = response2.body?.bytes()
+                        val randomFileName = "image_${UUID.randomUUID()}.mp4"
                         val imageFile = imageBytes?.let { byteArray ->
-                            File.createTempFile("fugv", ".jpg").apply {
+                            File.createTempFile("fugv1", ".jpg").apply {
                                 writeBytes(byteArray) // 使用 'it' 引用 let 块的参数
+                                renameTo(File(parent, randomFileName))
                             }
                         }
                         withContext(Dispatchers.Main) {
