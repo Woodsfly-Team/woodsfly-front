@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import com.example.woodsfly.R
 import com.example.woodsfly.RecordedActivity
 import com.example.woodsfly.CameraActivity
-import com.example.woodsfly.PersonalHistoryActivity
 import com.example.woodsfly.databinding.FragmentHomeBinding
 import com.example.woodsfly.introduce.IntroduceActivity1
 import com.example.woodsfly.introduce.IntroduceActivity2
