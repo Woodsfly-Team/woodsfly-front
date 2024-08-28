@@ -20,11 +20,21 @@ import com.example.woodsfly.ui.dashboard.DashboardFragment
 class PersonalHistoryActivity : AppCompatActivity() {
 
 
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var back: ImageView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
+
+    }
+
+
+        recyclerView = findViewById(R.id.recyclerViewHistory)
+        back = findViewById(R.id.back)
+        back.setOnClickListener { finish() }
     }
 
 

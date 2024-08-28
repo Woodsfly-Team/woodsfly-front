@@ -58,6 +58,11 @@ class ResultActivity : AppCompatActivity() {
             parseJson_zjy(response)
             loadImageFromPath(imagePath1.toString())
         }
+
+
+
+
+
     }
 
     //解析拍照和录音传来的json字符串
@@ -136,6 +141,11 @@ class ResultActivity : AppCompatActivity() {
             openLink(link)
         }
     }
+
+
+
+
+
 
     //TextView控件赋值
     private fun textLayout(chineseName:String, englishName:String, incidence:String, birdOrder:String, birdFamily:String, birdGenus:String, habitat:String, introduction:String, level:String){

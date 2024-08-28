@@ -106,6 +106,12 @@ class NotificationsFragment : Fragment() {
         }
 
 
+        // Set click listener for imageView3
+
+
+
+
+
         button2.setOnClickListener {
             val intent = Intent(requireContext(), PersonalLoginActivity::class.java)
             startActivity(intent)
