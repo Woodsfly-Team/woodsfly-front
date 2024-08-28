@@ -26,6 +26,5 @@ class PersonalHistoryActivity : AppCompatActivity() {
 
 
     }
-
 }
 
