@@ -20,11 +20,14 @@ import com.bumptech.glide.Glide
 import com.example.woodsfly.ui.dashboard.SearchDetailsResponse
 import com.google.gson.Gson
 import org.json.JSONObject
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 
 /**
  * 搜索结果页面+收藏功能
  *
- * @contributor Karenbluu、zzh0404
+ * @contributor Xiancaijiang、zzh0404
  * @Time 2024-08-23
  */
 
@@ -39,6 +42,7 @@ class ResultActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_result)
+
 
         // 初始化 SharedPreferences
         sharedPreferences = getSharedPreferences("AppSettings", MODE_PRIVATE)
@@ -211,12 +215,29 @@ class ResultActivity : AppCompatActivity() {
 
     //加载网络图片
     private fun loadImageFromPath(imagePath: String) {
+
         var imageView: ImageView = findViewById(R.id.imageUrl)
         if (!imagePath.isNullOrBlank()) {
             // 使用 Glide 加载图片
             Glide.with(this)
                 .load(imagePath) // 直接传入图片路径
                 .into(imageView)
+
+        Log.d("ResultActivity", imagePath)
+        var imageView : ImageView = findViewById(R.id.imageUrl)
+        if (imagePath.isNotBlank()) {
+            // 确保文件存在
+            val file = File(imagePath)
+            if (file.exists()) {
+                // 使用 Glide 加载本地文件
+                Glide.with(this)
+                    .load(file)
+                    .into(imageView)
+            } else {
+                Log.e("ResultActivity", "Image file does not exist: $imagePath")
+                // 处理文件不存在的情况
+            }
+
         } else {
             // 图片路径不存在时的处理逻辑
             Log.e("ResultActivity", "Image path is null or blank")

@@ -7,6 +7,7 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -154,24 +155,35 @@ class RecordedActivity : AppCompatActivity() {
             btn_crop_end.setOnClickListener {
                 btn_play.isEnabled=true
                 btn_upload.isEnabled=true
+                btn_crop.isEnabled=true
                 btn_crop_end.isEnabled=false
 
                 cropRecording(audioFileAbsolutePath.toString(), audioFileAbsolutePath_crop.toString(), crop_begin, crop_end)
                 audioFileAbsolutePath = audioFileAbsolutePath_crop
             }
             btn_upload.setOnClickListener {
+                btn_play.isEnabled=false
+                btn_crop.isEnabled=false
                 btn_upload.isEnabled = false
                 chronometer.base = SystemClock.elapsedRealtime()
                 // 实例化 UploadHelper，传入回调
+                val progressDialog = ProgressDialog(this).apply {
+                    setMessage("Uploading...")
+                    setCancelable(false)
+                    show()
+                }
                 val uploadHelper = RecordXieChengBase64()
                 uploadHelper.uploadRecord(audioFileAbsolutePath.toString(), 2, 1,"amr") { jsonString, imageFile ->
+                    progressDialog.dismiss()
                     // 上传成功回调
                     if (jsonString != null && imageFile != null) {
+                        Log.d("Upload Success6", "$jsonString,,$imageFile")
                         val bundle = Bundle()
                         bundle.putString("JSON_DATA_3", jsonString)
                         bundle.putString("imageFile_3", imageFile.absolutePath)
                         val intent = Intent(this, ResultActivity::class.java)
                         intent.putExtras(bundle)
+                        finish()
                         startActivity(intent)
                     } else {
                         Log.e("Upload Failure", "Failed to upload file")
@@ -486,15 +498,23 @@ class RecordedActivity : AppCompatActivity() {
                 audioFilePath = getFilePath(this, data.data!!) // 文件路径
 
                 mCurrentAudioUrl = data.data.toString()
+                val progressDialog = ProgressDialog(this).apply {
+                    setMessage("Uploading...")
+                    setCancelable(false)
+                    show()
+                }
                 val uploadHelper = RecordXieChengBase64()
                 uploadHelper.uploadRecord(audioFilePath.toString(), 2, 1,"mpeg") { jsonString, imageFile ->
+                    progressDialog.dismiss()
                     // 上传成功回调
                     if (jsonString != null && imageFile != null) {
+                        Log.d("Upload Success6", "$jsonString,,$imageFile")
                         val bundle = Bundle()
                         bundle.putString("JSON_DATA_3", jsonString)
                         bundle.putString("imageFile_3", imageFile.absolutePath)
                         val intent = Intent(this, ResultActivity::class.java)
                         intent.putExtras(bundle)
+                        finish()
                         startActivity(intent)
                     } else {
                         Log.e("Upload Failure", "没有跳转到结果页")
@@ -602,11 +622,11 @@ class RecordXieChengBase64 {
                     if (response2.isSuccessful) {
                         Log.d("Upload Success6", "图片路径上传成功")
                         val imageBytes = response2.body?.bytes()
-                        val randomFileName = "image_${UUID.randomUUID()}.mp4"
+                        //val randomFileName = "image_${UUID.randomUUID()}.jpg"
                         val imageFile = imageBytes?.let { byteArray ->
                             File.createTempFile("fugv1", ".jpg").apply {
                                 writeBytes(byteArray) // 使用 'it' 引用 let 块的参数
-                                renameTo(File(parent, randomFileName))
+                                //renameTo(File(parent, randomFileName))
                             }
                         }
                         withContext(Dispatchers.Main) {
