@@ -12,6 +12,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="49dp"
+
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -22,7 +23,7 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/searchbj"
-            android:hint="   搜索"
+            android:hint="     搜索"
             android:imeOptions="actionSearch"
             android:inputType="text" />
 
@@ -117,7 +118,7 @@
     <LinearLayout
         android:layout_width="280dp"
         android:layout_height="37dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="28dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -138,10 +139,10 @@
 
     <TextView
         android:id="@+id/textViewImageBackground"
-        android:layout_width="290dp"
-        android:layout_height="63dp"
+        android:layout_width="292dp"
+        android:layout_height="71dp"
         android:layout_gravity="center"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/c1"
         android:drawablePadding="0dp"
         android:gravity="center_horizontal"
@@ -155,15 +156,15 @@
     <TextView
         android:id="@+id/textViewImageBackground2"
         android:layout_width="294dp"
-        android:layout_height="67dp"
+        android:layout_height="73dp"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="14dp"
         android:background="@drawable/c2"
         android:drawablePadding="0dp"
-        android:gravity="left"
-        android:paddingLeft="45dp"
+        android:gravity="center_horizontal"
+        android:paddingLeft="0dp"
         android:paddingTop="10dp"
-        android:paddingRight="6dp"
+        android:paddingRight="38dp"
         android:text="你的文本"
         android:textColor="#000000"
         android:textSize="14sp" />

@@ -16,12 +16,14 @@ import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+
 /**
  * 个人设置界面，用于设置和保存账号密码。
  *
  * @author zoeyyyy-git
  * @Time 2024-8-28
  */
+
 class PersonalSettingsActivity : AppCompatActivity() {
 
     private lateinit var accountEditText: EditText // 账号输入框
@@ -79,12 +81,14 @@ class PersonalSettingsActivity : AppCompatActivity() {
             Toast.makeText(this, "账号和密码不能为空", Toast.LENGTH_SHORT).show()
         }
     }
+
     /**
      * 注册用户，向服务器发送账号密码信息
      *
      * @param username 用户名
      * @param password 密码
      */
+
     private fun registerUser(username: String, password: String) {
         val client = OkHttpClient()
         // 定义URL

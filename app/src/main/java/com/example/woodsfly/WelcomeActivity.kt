@@ -16,7 +16,7 @@ import androidx.core.view.WindowInsetsCompat
 /**
  * 欢迎界面，进入app延时三秒。
  *
- * @author Karenbluu
+ * @author Xiancaijiang
  * @Time 2024-08-17
  */
 

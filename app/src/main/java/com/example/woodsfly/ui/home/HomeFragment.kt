@@ -15,11 +15,11 @@ import com.example.woodsfly.introduce.IntroduceActivity2
 import com.example.woodsfly.introduce.IntroduceActivity3
 
 /**
- * v-3.0.1
- * 主页布局、点击事件
+ * v-3.2.1
+ * 主页布局、麦克峰 相机主要功能点击事件
  *
- * @author Karenbluu
- * @Time 2024-08-15
+ * @author Xiancaijiang
+ * @Time 2024-08-18
  */
 
 class HomeFragment : Fragment() {
@@ -61,6 +61,7 @@ class HomeFragment : Fragment() {
         }
         // 相机 点击事件
         binding.btCamera.setOnClickListener {
+
             val intent = Intent(requireContext(), CameraActivity::class.java)
             startActivity(intent)
         }

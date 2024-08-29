@@ -84,5 +84,4 @@ dependencies{
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation (libs.glide)
 
-
 }

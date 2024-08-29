@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,8 @@ import com.luck.picture.lib.interfaces.OnResultCallbackListener
 
 /**
  * 通知界面的Fragment，用于展示和处理应用内的通知功能
- * @contributor zoeyyyy-git karen_bluu
+ *
+ * @contributor zoeyyyy-git Xiancaijiang
  * @date 2024.8.27
  */
 
@@ -78,8 +80,8 @@ class NotificationsFragment : Fragment() {
         imageView4 = view.findViewById(R.id.imageView4)// 设置收藏记录点击区域的点击事件，跳转到收藏记录页面
         button2 = view.findViewById(R.id.button2)// 设置注册/登录按钮的点击事件，跳转到注册/登录页面
         button3 = view.findViewById(R.id.button3)// 设置退出登录按钮的点击事件，跳转到登录页面
-        sharedPreferences = requireActivity().getSharedPreferences("AppSettings", MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "")
+
         if (user_id?.isEmpty() == true) {
             button2.setText("注册登录")
             button2.isEnabled = true
@@ -130,10 +132,15 @@ class NotificationsFragment : Fragment() {
 
         button3.setOnClickListener {
 
+
             with(sharedPreferences.edit()) {
                 putString("account", "")
                 putString("password", "")
                 putString("user_id", "")
+                putString("browsing_history", "")
+
+                // 清除收藏记录，使用正确的键名
+                putString("favorite_items", "")
                 apply()
             }
 
@@ -141,6 +148,9 @@ class NotificationsFragment : Fragment() {
             startActivity(intent)
         }
     }
+
+
+
 
     override fun onResume() {
         super.onResume()
@@ -153,6 +163,7 @@ class NotificationsFragment : Fragment() {
             button2.isEnabled = false
         }
     }
+
 
     /**
      * 显示权限请求对话框，让用户选择拍照或从相册选择图片
