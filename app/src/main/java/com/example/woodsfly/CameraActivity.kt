@@ -100,6 +100,7 @@ class CameraActivity : ComponentActivity() {
 
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
+
                 uploadPhoto(it,false)
             }
         }//如果有图片调用图库
@@ -254,12 +255,16 @@ class ImageXieChengBase64 : AppCompatActivity(), CoroutineScope by MainScope() {
     // 使用主线程的CoroutineScope，注意在Activity销毁时取消协程
     private val client1 = OkHttpClient()
     private val client2 = OkHttpClient()
-    fun uploadRecord(image64: String,tag: Int, user_id: Int, onComplete: (String?, File?) -> Unit) {
+    fun uploadRecord(image64: String,
+                     tag: Int,
+                     user_id: Int,
+                     onComplete: (String?, File?) -> Unit
+    ) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val file = File(image64)
                 // 创建 RequestBody，用于封装文件数据
-                val fileRequestBody = RequestBody.create("image/jpg".toMediaType(), file)
+                val fileRequestBody = RequestBody.create("image/jpg".toMediaType(), file.readBytes())
 
                 // 创建 MultipartBody.Part，用于封装文件和参数名
                 val filePart = MultipartBody.Part.createFormData("file", file.name, fileRequestBody)
@@ -268,28 +273,29 @@ class ImageXieChengBase64 : AppCompatActivity(), CoroutineScope by MainScope() {
                 val multipartBody = MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
                     .addPart(filePart)
-                    .build()
 
-                val url1 = "http://10.0.2.2:4523/m1/4938021-4595545-default/predict?tag=1&user_id=1"
+
+                val url1 = "http://59.110.123.151:80/predict?tag=1&user_id=1"
 
                 val request1 = Request.Builder()
                     .url(url1)
-                    .post(multipartBody)
+                    .post(multipartBody.build())
                     .addHeader("User-Agent", "Apify/1.0.0 (https://apifox.com)")
                     .build()
 
                 val response1 = client1.newCall(request1).execute()
-
+                Log.d("Upload Success1", "$image64,,$tag,,$user_id,,${file.readBytes()}")
                 if (response1.isSuccessful) {
-                    Log.d("Upload Success1", "File uploaded successfully")
+                    Log.d("Upload Success2", "File uploaded successfully")
                     json_en = 2
                     val jsonString = response1.body?.string()
+                    Log.d("Upload Success3", jsonString.toString())
                     //解析json获取image
                     val jsonObject = jsonString?.let { JSONObject(it) }
                     val dataObject = jsonObject?.getJSONObject("data")
                     val file_id = dataObject?.getInt("image")
                     //第二次请求
-                    val url2 = "http://10.0.2.2:4523/m1/4938021-4595545-default/image?file_id=$file_id"
+                    val url2 = "http://59.110.123.151:80/image?file_id=$file_id"
                     val body = RequestBody.create("text/plain".toMediaType(), file_id.toString())
                     val request2 = Request.Builder()
                         .url(url2)
@@ -299,7 +305,7 @@ class ImageXieChengBase64 : AppCompatActivity(), CoroutineScope by MainScope() {
                     // 执行第二个请求并获取图片文件
                     val response2 = client2.newCall(request2).execute()
                     if (response2.isSuccessful) {
-                        Log.d("Upload Success6", "图片路径上传成功")
+                        Log.d("Upload Success4", "图片路径上传成功")
                         val imageBytes = response2.body?.bytes()
                         val randomFileName = "image_${UUID.randomUUID()}.jpg"
                         val imageFile = imageBytes?.let { byteArray ->
@@ -313,19 +319,19 @@ class ImageXieChengBase64 : AppCompatActivity(), CoroutineScope by MainScope() {
                             onComplete(jsonString, imageFile) // 回调上传结果和图片文件
                         }
                     } else {
-                        Log.e("Upload unSuccess", "图片文件请求失败")
+                        Log.e("Upload unSuccess1", "图片文件请求失败")
                         withContext(Dispatchers.Main) {
                             onComplete(null, null) // 图片文件请求失败时回调空
                         }
                     }
                 } else {
-                    Log.e("Upload unSuccess", "tupian文件上传失败")
+                    Log.e("Upload unSuccess2", "第一次请求失败")
                     withContext(Dispatchers.Main) {
                         onComplete(null, null) // tupian文件上传失败时回调空
                     }
                 }
             } catch (e: Exception) {
-                Log.e("Upload Error", e.message ?: "Unknown error")
+                Log.e("Upload Error3", e.message ?: "Unknown error")
                 withContext(Dispatchers.Main) {
                     onComplete(null, null) // 出现异常时回调空
                 }

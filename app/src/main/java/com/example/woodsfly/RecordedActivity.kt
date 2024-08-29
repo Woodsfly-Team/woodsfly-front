@@ -576,7 +576,7 @@ class RecordXieChengBase64 {
                     .build()
 
                 val response1 = client1.newCall(request1).execute()
-
+                Log.d("Upload Success1", "$filePath,,$tag,,$user_id,,$fileContent")
                 if (response1.isSuccessful) {
                     Log.d("Upload Success1", "File uploaded successfully")
                     json_en = 3
