@@ -15,7 +15,7 @@
         android:layout_height="200dp"
         android:layout_marginBottom="30dp"
         android:contentDescription="TODO"
-        app:srcCompat="@drawable/login_per" />
+        app:srcCompat="@drawable/bird" />
     <!-- 账号输入框 -->
     <!--    <com.google.android.material.textfield.TextInputLayout-->
     <!--        android:id="@+id/tilSettingsAccount"-->
