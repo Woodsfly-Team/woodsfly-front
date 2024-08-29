@@ -14,7 +14,6 @@ import com.example.woodsfly.R
  * @Time 2024-08-27
  */
 
-
 class IntroduceActivity2 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

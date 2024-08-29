@@ -58,11 +58,12 @@ import java.util.UUID
 var json_en: Int = 0
 
 /**
- * v-3.0.1
  * 录音功能
+ *
  * @author zzh
- * @Time 2024-08-27
+ * @Time 2024-08-18
  */
+
 class RecordedActivity : AppCompatActivity() {
 
     private var sdcardfile: File? = null

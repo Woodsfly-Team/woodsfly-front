@@ -12,8 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
  * 本地收藏界面
  *
  * @author Xiancaijiang
- * @Time 2024-08-28
+ * @Time 2024-08-27
  */
+
 class StarHistoryActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences

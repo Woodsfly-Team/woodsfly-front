@@ -11,7 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.woodsfly.databinding.ActivityMainBinding
 
 /**
- * v-3.0.1
+ * v-3.3.0
  * 主页面整体规划，导航栏部署
  *
  * @author Xiancaijiang
