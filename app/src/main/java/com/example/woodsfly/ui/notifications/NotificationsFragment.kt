@@ -81,7 +81,8 @@ class NotificationsFragment : Fragment() {
         button2 = view.findViewById(R.id.button2)// 设置注册/登录按钮的点击事件，跳转到注册/登录页面
         button3 = view.findViewById(R.id.button3)// 设置退出登录按钮的点击事件，跳转到登录页面
         val user_id = sharedPreferences.getString("user_id", "")
-
+// 加载保存的用户头像
+        loadAvatar()
         if (user_id?.isEmpty() == true) {
             button2.setText("注册登录")
             button2.isEnabled = true
@@ -149,11 +150,17 @@ class NotificationsFragment : Fragment() {
         }
     }
 
-
+    private fun loadAvatar() {
+        val avatarPath = sharedPreferences.getString("avatar_path", null)
+        avatarPath?.let {
+            Glide.with(requireActivity()).load(it).into(imageView)
+        }
+    }
 
 
     override fun onResume() {
         super.onResume()
+        loadAvatar()
         val account = sharedPreferences.getString("account", "")
         if (account?.isEmpty() == true) {
             button2.setText("注册/登录")
@@ -190,7 +197,14 @@ class NotificationsFragment : Fragment() {
                 .forResultActivity(object : OnResultCallbackListener<LocalMedia?> {
                     override fun onResult(result: ArrayList<LocalMedia?>) {
                         val get = result.get(0)
-                        activity?.let { it1 -> Glide.with(it1).load(get?.path).into(imageView) }
+                        activity?.let { it1 ->
+                            Glide.with(it1).load(get?.path).into(imageView)
+                            // 保存图片路径到 SharedPreferences
+                            with(sharedPreferences.edit()) {
+                                putString("avatar_path", get?.path)
+                                apply()
+                            }
+                        }
                     }
 
                     override fun onCancel() {
@@ -206,7 +220,14 @@ class NotificationsFragment : Fragment() {
                 .forSystemResultActivity(object : OnResultCallbackListener<LocalMedia?> {
                     override fun onResult(result: ArrayList<LocalMedia?>) {
                         val get = result.get(0)
-                        activity?.let { it1 -> Glide.with(it1).load(get?.path).into(imageView) }
+                        activity?.let { it1 ->
+                            Glide.with(it1).load(get?.path).into(imageView)
+                            // 保存图片路径到 SharedPreferences
+                            with(sharedPreferences.edit()) {
+                                putString("avatar_path", get?.path)
+                                apply()
+                            }
+                        }
                     }
 
                     override fun onCancel() {
@@ -217,6 +238,4 @@ class NotificationsFragment : Fragment() {
         create.show()
 
     }
-
-
 }
