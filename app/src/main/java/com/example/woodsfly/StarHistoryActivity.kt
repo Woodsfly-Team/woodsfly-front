@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 /**
  * 本地收藏界面
  *
- * @author Karenbluu
+ * @author Xiancaijiang
  * @Time 2024-08-28
  */
 
@@ -28,6 +28,7 @@ class StarHistoryActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_star_history)
 
+        //初始化按钮
         favoritesTextView = findViewById(R.id.favoriteItemsTextView)
 
 

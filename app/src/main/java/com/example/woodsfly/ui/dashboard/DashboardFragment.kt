@@ -35,6 +35,7 @@ import java.io.File
 
 
 /**
+
  * * V-3.0.2
  * * 搜索布局，接口文件接收
  * 正式接口测试完成
@@ -42,6 +43,7 @@ import java.io.File
  *
  * * @author WZL123W3
  * * @Time 2024-08-29
+
  */
 
 class DashboardFragment : Fragment() {
@@ -70,7 +72,7 @@ class DashboardFragment : Fragment() {
     // Handler用于定时任务
     private val handler = Handler(Looper.getMainLooper())
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? { // 重写onCreateView方法，用于创建视图
-        // Inflate the layout for this fragment // 加载布局文件
+        // 加载布局文件
         return inflater.inflate(R.layout.fragment_dashboard, container, false) // 返回加载的布局视图
     }
 
@@ -130,7 +132,7 @@ class DashboardFragment : Fragment() {
 
 
 
-        // 初始化Retrofit // 初始化网络请求框架
+        //  初始化网络请求框架
         val retrofit = Retrofit.Builder()
             .baseUrl("http://59.110.123.151:80/") // 设置Retrofit的baseUrl
             .addConverterFactory(GsonConverterFactory.create()) // 添加Gson转换工厂
@@ -138,7 +140,7 @@ class DashboardFragment : Fragment() {
 
         apiService = retrofit.create(ApiService::class.java) // 创建ApiService实例
 
-        // 设置输入监听 // 设置搜索输入框的监听器
+        //设置搜索输入框的监听器
         searchEditText.addTextChangedListener(object : TextWatcher { // 使用匿名类实现TextWatcher接口
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {} // 文本变化前调用
 

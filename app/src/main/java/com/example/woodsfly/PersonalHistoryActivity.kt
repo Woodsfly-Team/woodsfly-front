@@ -15,7 +15,7 @@ import com.example.woodsfly.ui.dashboard.DashboardFragment
 /**
  * 本地浏览界面
  *
- * @author Karenbluu
+ * @author Xiancaijiang
  * @Time 2024-08-28
  */
 
@@ -30,6 +30,7 @@ class PersonalHistoryActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_history)
 
+        //初始化按钮
         historyTextView = findViewById(R.id.historyTextView)
 
         // 显示浏览记录

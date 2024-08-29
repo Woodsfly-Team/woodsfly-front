@@ -17,9 +17,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.example.woodsfly.ui.dashboard.ApiService
 import com.example.woodsfly.ui.dashboard.SearchDetailsResponse
 import com.google.gson.Gson
 import org.json.JSONObject
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * 搜索结果页面+收藏功能
@@ -225,7 +228,7 @@ class ResultActivity : AppCompatActivity() {
             browsingHistory.add(0, "$chineseName ($englishName)")
         }
 
-        // 保持最多 20 条浏览记录
+        // 保持最多 100 条浏览记录
         if (browsingHistory.size > 100) {
             browsingHistory.removeAt(browsingHistory.size - 1)
         }
@@ -252,8 +255,8 @@ class ResultActivity : AppCompatActivity() {
         // 将新的收藏记录添加到列表头部
         favorites.add(0, "$chineseName ($englishName)")
 
-        // 保持最多 20 条收藏记录
-        if (favorites.size > 20) {
+        // 保持最多 100 条收藏记录
+        if (favorites.size > 100) {
             favorites.removeAt(favorites.size - 1)
         }
 
@@ -271,4 +274,24 @@ class ResultActivity : AppCompatActivity() {
         editor.putString("favorite_items", favorites.joinToString("\n"))
         editor.apply()
     }
+
+
+
+    /**
+     * 浏览与收藏记录 后端交互数据类
+     *
+     * @contributor Karenbluu
+     * @Time 2024-08-29
+     */
+
+    data class NetworkResponse(
+        val code: Int,
+        val message: String,
+        val data: Data?
+    )
+
+    data class Data(
+        val star_id: Int? = null,
+        val browse_id: Int? = null
+    )
 }
