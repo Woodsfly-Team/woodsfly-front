@@ -137,7 +137,7 @@ class DashboardFragment : Fragment() {
 
         apiService = retrofit.create(ApiService::class.java) // 创建ApiService实例
 
-        // 设置输入监听 // 设置搜索输入框的监听器
+        //设置搜索输入框的监听器
         searchEditText.addTextChangedListener(object : TextWatcher { // 使用匿名类实现TextWatcher接口
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {} // 文本变化前调用
 

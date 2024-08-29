@@ -17,9 +17,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.example.woodsfly.ui.dashboard.ApiService
 import com.example.woodsfly.ui.dashboard.SearchDetailsResponse
 import com.google.gson.Gson
 import org.json.JSONObject
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * 搜索结果页面+收藏功能
@@ -271,4 +274,24 @@ class ResultActivity : AppCompatActivity() {
         editor.putString("favorite_items", favorites.joinToString("\n"))
         editor.apply()
     }
+
+
+
+    /**
+     * 浏览与收藏记录 后端交互数据类
+     *
+     * @contributor Karenbluu
+     * @Time 2024-08-29
+     */
+
+    data class NetworkResponse(
+        val code: Int,
+        val message: String,
+        val data: Data?
+    )
+
+    data class Data(
+        val star_id: Int? = null,
+        val browse_id: Int? = null
+    )
 }

@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 /**
  * 本地收藏界面
  *
- * @author Karenbluu
+ * @author Xiancaijiang
  * @Time 2024-08-28
  */
 

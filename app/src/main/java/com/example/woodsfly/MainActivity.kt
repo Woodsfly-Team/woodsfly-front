@@ -14,7 +14,7 @@ import com.example.woodsfly.databinding.ActivityMainBinding
  * v-3.0.1
  * 主页面整体规划，导航栏部署
  *
- * @author Karenbluu
+ * @author Xiancaijiang
  * @Time 2024-08-15
  */
 
