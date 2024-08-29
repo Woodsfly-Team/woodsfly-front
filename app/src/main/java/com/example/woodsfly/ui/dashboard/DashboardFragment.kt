@@ -32,16 +32,17 @@ import retrofit2.http.Query
 
 import okhttp3.ResponseBody
 import java.io.File
-/**搜索页面完善中……*/
 
 
 /**
  * * V-3.0.2
  * * 搜索布局，接口文件接收
- * 搜索接口测试，api可用，还没有测试正式环境
+ * 正式接口测试完成
+ * 搜索界面button已完成
  *
  * * @author WZL123W3
- * * @Time 2024-08-28……*/
+ * * @Time 2024-08-29
+ */
 
 class DashboardFragment : Fragment() {
 
@@ -51,14 +52,14 @@ class DashboardFragment : Fragment() {
     private lateinit var apiService: ApiService // 声明一个ApiService变量，用于网络请求
     private lateinit var searchImageView: ImageView// 删除按钮
     // 定义两组要循环显示的字符串数组（每日精选）
-    private val ytexts1 = arrayOf("我是秃头鹰，也叫Bald Eagle", "我是金翅雀，也叫American Goldfinch", "我是红尾鹰,也叫Red-Tailed Hawk",
+    private val ytexts1 = arrayOf("我是秃头鹰，也叫Bald Eagle", "我是金翅雀，也叫American Goldfinch", "我是红尾鹰，也叫Red-Tailed Hawk",
         "我是绿头鸭，也可以叫我Mallard",
         "我是大蓝鹭，也可以叫我Great Blue Heron","我是雪莉鸫，也可以叫我 Cedar Waxwing","我是冠山雀，也可以叫我Tufted Titmouse",
-        "我是普通潜鸟,也可以叫我Common Loon","我是卡罗莱纳雀，也可以叫我Carolina Wren","我是鸻鹬，也可以叫我Killdeer","我是蓝松鸦，也可以叫我Blue Jay", "我是鱼鹰，也可以叫我Osprey", "我是红喉蜂鸟，也可以叫我 Ruby-Throated Hummingbird",
-        "我是卡罗莱纳山雀， 也可以叫我 Carolina Chickadee", "我是林鸭，也可以叫我Wood Duck",
+        "我是普通潜鸟,也可以叫我Common Loon","我是卡罗莱纳雀，也可以叫我Carolina Wren","我是鸻鹬，也可以叫我Killdeer","我是蓝松鸦，也可以叫我Blue Jay", "我是鱼鹰，也可以叫我Osprey", "我是红喉蜂鸟，也可以叫我Ruby-Throated Hummingbird",
+        "我是卡罗莱纳山雀，也可以叫我Carolina Chickadee", "我是林鸭，也可以叫我Wood Duck",
         "我是腰带翠鸟，也可以叫我 Belted Kingfisher", "我是白头鹰，也可以叫我Snowy Owl", "我是加拿大鹅，也可以叫我Canadian Goose", "我是烟囱雨燕，也可以叫我Chimney Swift",
         "我是红腹啄木鸟，也可以叫我Red-Bellied Woodpecker" )
-    private val ytexts2 = arrayOf("我是蓝松鸦，也可以叫我Blue Jay", "我是鱼鹰，也可以叫我Osprey", "我是红喉蜂鸟，也可以叫我 Ruby-Throated Hummingbird",
+    private val ytexts2 = arrayOf("我是蓝松鸦，也可以叫我Blue Jay", "我是鱼鹰，也可以叫我Osprey", "我是红喉蜂鸟，也可以叫我Ruby-Throated Hummingbird",
         "我是卡罗莱纳山雀，也可以叫我 Carolina Chickadee", "我是林鸭，也可以叫我Wood Duck", "我是歌雀麻雀，也可以叫我Song Sparrow", "我是北部啄木鸟，也可以叫我Northern Flicker", "我是东蓝鸟，也可以叫我Eastern Bluebird","我是东蓝鸟，也可以叫我Eastern Bluebird","我是雕鸮，也可以叫我Great Horned Owl",
         "我是紫金雀，也可以叫我 Purple Finch","我是秃头鹰，也可以叫我Bald Eagle", "我是金翅雀，也可以叫我American Goldfinch","我是红尾鹰，也可以叫我Red-Tailed Hawk", "我是绿头鸭，也可以叫我Mallard","我是大蓝鹭，也可以叫我Great Blue Heron",
         "我是旋木鸟，也可以叫我Baltimore Oriole","我是斑纹枭，也可以叫我 Barred Owl","我是绣眼雀，也可以叫我House Finch","我是美国知更鸟，也可以叫我American Robin","我是北美红雀，也可以叫我Northern Cardinal")
@@ -111,20 +112,20 @@ class DashboardFragment : Fragment() {
         // 设置点击事件监听器
         // 鸟界明星的四个按钮，因为之前接口可以传输名字，早上测试可以跳转，但是现在是id号，不知道具体id，暂时注释了
         image02.setOnClickListener {
-            // 执行点击image02的操作，比如调用搜索方法
-            // searchDetails("夜鹭")
+            // 执行点击image02的操作，比如调用搜索方法"夜鹭"
+             searchDetails(29)
         }
         image03.setOnClickListener {
-            // 执行点击image03的操作
-            //searchDetails("翠鸟")
+            // 执行点击image03的操作"翠鸟"
+            searchDetails(110)
         }
         image04.setOnClickListener {
-            // 执行点击image04的操作
-            //searchDetails("戴胜")
+            // 执行点击image04的操作"戴胜"
+            searchDetails(112)
         }
         image05.setOnClickListener {
-            // 执行点击image05的操作
-            //  searchDetails("珠颈斑鸠")
+            // 执行点击image05的操作"珠颈斑鸠"
+              searchDetails(210)
         }
 
 
