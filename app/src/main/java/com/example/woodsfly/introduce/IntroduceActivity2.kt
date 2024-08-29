@@ -7,6 +7,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.woodsfly.R
 
+/**
+ * 鸟届趣事2
+ *
+ * @author Karenbluu
+ * @Time 2024-08-27
+ */
+
+
 class IntroduceActivity2 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

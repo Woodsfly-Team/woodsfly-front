@@ -51,8 +51,7 @@ android {
         }
     }
 }
-
-dependencies {
+dependencies{
     implementation ("io.github.lucksiege:pictureselector:v3.11.2")
     implementation ("com.google.android.material:material:1.7.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -84,9 +83,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation (libs.glide)
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-
 
 
 }

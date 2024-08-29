@@ -1,6 +1,5 @@
 package com.example.woodsfly.ui.dashboard
 
-
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -11,8 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.woodsfly.databinding.FragmentDashboardBinding
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -34,10 +31,8 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 import okhttp3.ResponseBody
-import retrofit2.http.Url
-import java.io.IOException
 import java.io.File
-
+/**搜索页面完善中……*/
 
 
 /**
@@ -46,7 +41,7 @@ import java.io.File
  * 搜索接口测试，api可用，还没有测试正式环境
  *
  * * @author WZL123W3
- * * @Time 2024-08-24……*/
+ * * @Time 2024-08-28……*/
 
 class DashboardFragment : Fragment() {
 
@@ -136,7 +131,7 @@ class DashboardFragment : Fragment() {
 
         // 初始化Retrofit // 初始化网络请求框架
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://apifoxmock.com/m1/4938021-4595545-default/") // 设置Retrofit的baseUrl
+            .baseUrl("http://59.110.123.151:80/") // 设置Retrofit的baseUrl
             .addConverterFactory(GsonConverterFactory.create()) // 添加Gson转换工厂
             .build() // 构建Retrofit实例
 
@@ -214,12 +209,12 @@ class DashboardFragment : Fragment() {
                         // 将 Bundle 放入 Intent
                         downloadImage(details.data.image) { imagePath ->
                             bundle.putString("imageFile_1", imagePath)
-                        intent.putExtras(bundle)
+                            intent.putExtras(bundle)
 
-                        // 启动 ResultActivity
-                        startActivity(intent)
-                    }
-                } }else {
+                            // 启动 ResultActivity
+                            startActivity(intent)
+                        }
+                    } }else {
                     Log.e("Upload Failure", "Failed to upload file")
                     Toast.makeText(requireContext(), "Search Error1: ${response.message()}", Toast.LENGTH_SHORT).show() // 显示搜索错误信息
                 }
@@ -321,4 +316,3 @@ class SimpleAdapter(context: Context, private val birdInfoList: List<BirdInfo>) 
         return view // 返回视图
     }
 }
-
