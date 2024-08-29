@@ -29,6 +29,7 @@ import com.luck.picture.lib.interfaces.OnResultCallbackListener
 
 /**
  * 通知界面的Fragment，用于展示和处理应用内的通知功能
+ *
  * @contributor zoeyyyy-git Xiancaijiang
  * @date 2024.8.27
  */
