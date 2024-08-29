@@ -79,12 +79,14 @@ class PersonalSettingsActivity : AppCompatActivity() {
             Toast.makeText(this, "账号和密码不能为空", Toast.LENGTH_SHORT).show()
         }
     }
+
     /**
      * 注册用户，向服务器发送账号密码信息
      *
      * @param username 用户名
      * @param password 密码
      */
+
     private fun registerUser(username: String, password: String) {
         val client = OkHttpClient()
         // 定义URL
