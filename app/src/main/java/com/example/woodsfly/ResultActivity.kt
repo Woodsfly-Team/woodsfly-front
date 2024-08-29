@@ -279,9 +279,25 @@ class ResultActivity : AppCompatActivity() {
                 val chineseName = response.data.chinese_name
                 val englishName = response.data.english_name
                 browsingHistory.add(0, "$chineseName ($englishName)")
+            }else if (bundle != null && bundle.containsKey("JSON_DATA_2")) {
+                val responseJson = bundle.getString("JSON_DATA_2")
+                val gson = Gson()
+                val response: SearchDetailsResponse =
+                    gson.fromJson(responseJson, SearchDetailsResponse::class.java)
+                val chineseName = response.data.chinese_name
+                val englishName = response.data.english_name
+                browsingHistory.add(0, "$chineseName ($englishName)")
+            }else if (bundle != null && bundle.containsKey("JSON_DATA_3")) {
+                val responseJson = bundle.getString("JSON_DATA_3")
+                val gson = Gson()
+                val response: SearchDetailsResponse =
+                    gson.fromJson(responseJson, SearchDetailsResponse::class.java)
+                val chineseName = response.data.chinese_name
+                val englishName = response.data.english_name
+                browsingHistory.add(0, "$chineseName ($englishName)")
             }
 
-            // 保持最多 50 条浏览记录
+            // 保持最多 100 条浏览记录
             if (browsingHistory.size > 100) {
                 browsingHistory.removeAt(browsingHistory.size - 1)
             }
@@ -328,7 +344,7 @@ class ResultActivity : AppCompatActivity() {
                 favorites.add(0, "$chineseName ($englishName)")
             }
 
-            // 保持最多 50 条收藏记录
+            // 保持最多 100 条收藏记录
             if (favorites.size > 100) {
                 favorites.removeAt(favorites.size - 1)
             }
