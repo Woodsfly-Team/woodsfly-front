@@ -17,5 +17,12 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="160dp"/>
+    <Button
+        android:id="@+id/buttonClearHistory"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="300dp"
+        android:background="@drawable/ic_clear"
+        android:layout_marginTop="450dp"/>
 
 </LinearLayout>

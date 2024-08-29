@@ -223,24 +223,25 @@ class ResultActivity : AppCompatActivity() {
                 .load(imagePath) // 直接传入图片路径
                 .into(imageView)
 
-        Log.d("ResultActivity", imagePath)
-        var imageView : ImageView = findViewById(R.id.imageUrl)
-        if (imagePath.isNotBlank()) {
-            // 确保文件存在
-            val file = File(imagePath)
-            if (file.exists()) {
-                // 使用 Glide 加载本地文件
-                Glide.with(this)
-                    .load(file)
-                    .into(imageView)
-            } else {
-                Log.e("ResultActivity", "Image file does not exist: $imagePath")
-                // 处理文件不存在的情况
-            }
+            Log.d("ResultActivity", imagePath)
+            var imageView: ImageView = findViewById(R.id.imageUrl)
+            if (imagePath.isNotBlank()) {
+                // 确保文件存在
+                val file = File(imagePath)
+                if (file.exists()) {
+                    // 使用 Glide 加载本地文件
+                    Glide.with(this)
+                        .load(file)
+                        .into(imageView)
+                } else {
+                    Log.e("ResultActivity", "Image file does not exist: $imagePath")
+                    // 处理文件不存在的情况
+                }
 
-        } else {
-            // 图片路径不存在时的处理逻辑
-            Log.e("ResultActivity", "Image path is null or blank")
+            } else {
+                // 图片路径不存在时的处理逻辑
+                Log.e("ResultActivity", "Image path is null or blank")
+            }
         }
     }
 
