@@ -307,11 +307,11 @@ class ImageXieChengBase64 : AppCompatActivity(), CoroutineScope by MainScope() {
                     if (response2.isSuccessful) {
                         Log.d("Upload Success4", "图片路径上传成功")
                         val imageBytes = response2.body?.bytes()
-                        val randomFileName = "image_${UUID.randomUUID()}.jpg"
+                        //val randomFileName = "image_${UUID.randomUUID()}.jpg"
                         val imageFile = imageBytes?.let { byteArray ->
                             File.createTempFile("fugv1", ".jpg").apply {
                                 writeBytes(byteArray) // 使用 'it' 引用 let 块的参数
-                                renameTo(File(parent, randomFileName))
+                                //renameTo(File(parent, randomFileName))
                             }
                         }
                         withContext(Dispatchers.Main) {

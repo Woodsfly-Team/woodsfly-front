@@ -154,6 +154,7 @@ class RecordedActivity : AppCompatActivity() {
             btn_crop_end.setOnClickListener {
                 btn_play.isEnabled=true
                 btn_upload.isEnabled=true
+                btn_crop.isEnabled=true
                 btn_crop_end.isEnabled=false
 
                 cropRecording(audioFileAbsolutePath.toString(), audioFileAbsolutePath_crop.toString(), crop_begin, crop_end)
@@ -167,6 +168,7 @@ class RecordedActivity : AppCompatActivity() {
                 uploadHelper.uploadRecord(audioFileAbsolutePath.toString(), 2, 1,"amr") { jsonString, imageFile ->
                     // 上传成功回调
                     if (jsonString != null && imageFile != null) {
+                        Log.d("Upload Success6", "$jsonString,,$imageFile")
                         val bundle = Bundle()
                         bundle.putString("JSON_DATA_3", jsonString)
                         bundle.putString("imageFile_3", imageFile.absolutePath)
@@ -490,6 +492,7 @@ class RecordedActivity : AppCompatActivity() {
                 uploadHelper.uploadRecord(audioFilePath.toString(), 2, 1,"mpeg") { jsonString, imageFile ->
                     // 上传成功回调
                     if (jsonString != null && imageFile != null) {
+                        Log.d("Upload Success6", "$jsonString,,$imageFile")
                         val bundle = Bundle()
                         bundle.putString("JSON_DATA_3", jsonString)
                         bundle.putString("imageFile_3", imageFile.absolutePath)
@@ -602,11 +605,11 @@ class RecordXieChengBase64 {
                     if (response2.isSuccessful) {
                         Log.d("Upload Success6", "图片路径上传成功")
                         val imageBytes = response2.body?.bytes()
-                        val randomFileName = "image_${UUID.randomUUID()}.mp4"
+                        //val randomFileName = "image_${UUID.randomUUID()}.jpg"
                         val imageFile = imageBytes?.let { byteArray ->
                             File.createTempFile("fugv1", ".jpg").apply {
                                 writeBytes(byteArray) // 使用 'it' 引用 let 块的参数
-                                renameTo(File(parent, randomFileName))
+                                //renameTo(File(parent, randomFileName))
                             }
                         }
                         withContext(Dispatchers.Main) {
