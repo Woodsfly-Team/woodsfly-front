@@ -225,7 +225,7 @@ class ResultActivity : AppCompatActivity() {
             browsingHistory.add(0, "$chineseName ($englishName)")
         }
 
-        // 保持最多 20 条浏览记录
+        // 保持最多 100 条浏览记录
         if (browsingHistory.size > 100) {
             browsingHistory.removeAt(browsingHistory.size - 1)
         }
@@ -252,8 +252,8 @@ class ResultActivity : AppCompatActivity() {
         // 将新的收藏记录添加到列表头部
         favorites.add(0, "$chineseName ($englishName)")
 
-        // 保持最多 20 条收藏记录
-        if (favorites.size > 20) {
+        // 保持最多 100 条收藏记录
+        if (favorites.size > 100) {
             favorites.removeAt(favorites.size - 1)
         }
 

@@ -30,6 +30,7 @@ class PersonalHistoryActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_history)
 
+        //初始化按钮
         historyTextView = findViewById(R.id.historyTextView)
 
         // 显示浏览记录

@@ -534,11 +534,12 @@ class RecordedActivity : AppCompatActivity() {
 }
 
 /**
- * v-3.0.1
+ *
  * 录音接口
  * @author zzh
  * @Time 2024-08-27
  */
+
 class RecordXieChengBase64 {
 
     private val client1 = OkHttpClient()

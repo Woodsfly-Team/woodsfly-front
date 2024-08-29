@@ -15,11 +15,11 @@ import com.example.woodsfly.introduce.IntroduceActivity2
 import com.example.woodsfly.introduce.IntroduceActivity3
 
 /**
- * v-3.0.1
+ * v-3.2.1
  * 主页布局、点击事件
  *
  * @author Karenbluu
- * @Time 2024-08-15
+ * @Time 2024-08-18
  */
 
 class HomeFragment : Fragment() {
