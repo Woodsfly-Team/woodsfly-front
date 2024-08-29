@@ -7,6 +7,7 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -161,11 +162,19 @@ class RecordedActivity : AppCompatActivity() {
                 audioFileAbsolutePath = audioFileAbsolutePath_crop
             }
             btn_upload.setOnClickListener {
+                btn_play.isEnabled=false
+                btn_crop.isEnabled=false
                 btn_upload.isEnabled = false
                 chronometer.base = SystemClock.elapsedRealtime()
                 // 实例化 UploadHelper，传入回调
+                val progressDialog = ProgressDialog(this).apply {
+                    setMessage("Uploading...")
+                    setCancelable(false)
+                    show()
+                }
                 val uploadHelper = RecordXieChengBase64()
                 uploadHelper.uploadRecord(audioFileAbsolutePath.toString(), 2, 1,"amr") { jsonString, imageFile ->
+                    progressDialog.dismiss()
                     // 上传成功回调
                     if (jsonString != null && imageFile != null) {
                         Log.d("Upload Success6", "$jsonString,,$imageFile")
@@ -174,6 +183,7 @@ class RecordedActivity : AppCompatActivity() {
                         bundle.putString("imageFile_3", imageFile.absolutePath)
                         val intent = Intent(this, ResultActivity::class.java)
                         intent.putExtras(bundle)
+                        finish()
                         startActivity(intent)
                     } else {
                         Log.e("Upload Failure", "Failed to upload file")
@@ -488,8 +498,14 @@ class RecordedActivity : AppCompatActivity() {
                 audioFilePath = getFilePath(this, data.data!!) // 文件路径
 
                 mCurrentAudioUrl = data.data.toString()
+                val progressDialog = ProgressDialog(this).apply {
+                    setMessage("Uploading...")
+                    setCancelable(false)
+                    show()
+                }
                 val uploadHelper = RecordXieChengBase64()
                 uploadHelper.uploadRecord(audioFilePath.toString(), 2, 1,"mpeg") { jsonString, imageFile ->
+                    progressDialog.dismiss()
                     // 上传成功回调
                     if (jsonString != null && imageFile != null) {
                         Log.d("Upload Success6", "$jsonString,,$imageFile")
@@ -498,6 +514,7 @@ class RecordedActivity : AppCompatActivity() {
                         bundle.putString("imageFile_3", imageFile.absolutePath)
                         val intent = Intent(this, ResultActivity::class.java)
                         intent.putExtras(bundle)
+                        finish()
                         startActivity(intent)
                     } else {
                         Log.e("Upload Failure", "没有跳转到结果页")

@@ -44,6 +44,7 @@ class ResultActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_result)
 
+
         // 初始化 SharedPreferences
         sharedPreferences = getSharedPreferences("AppSettings", MODE_PRIVATE)
 
