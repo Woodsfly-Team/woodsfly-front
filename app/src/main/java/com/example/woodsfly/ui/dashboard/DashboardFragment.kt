@@ -104,7 +104,7 @@ class DashboardFragment : Fragment() {
                 textView2.text = texts2[currentTextIndex2]
 
                 // 1分钟更新一次
-                handler.postDelayed(this, 60 * 1000)
+                handler.postDelayed(this, 10 * 1000)
             }
         }
 

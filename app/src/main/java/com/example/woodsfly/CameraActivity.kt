@@ -2,6 +2,7 @@ package com.example.woodsfly
 
 import android.Manifest
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -211,18 +212,29 @@ class CameraActivity : ComponentActivity() {
     }
 
     private fun uploadPhoto(uri: Uri, isCameraImage: Boolean) {
-            val imageProcessor = ImageXieChengBase64()
-            imageProcessor.uploadRecord(getPathFromUri(uri), 1, 1) { jsonString, imageFile ->
+        val progressDialog = ProgressDialog(this).apply {
+            setMessage("Uploading...")
+            setCancelable(false)
+            show()
+        }
+        val imageProcessor = ImageXieChengBase64()
+        imageProcessor.uploadRecord(getPathFromUri(uri), 1, 1) { jsonString, imageFile ->
+                progressDialog.dismiss()
                 // 上传成功回调
                 if (jsonString != null && imageFile != null) {
-                    val bundle = Bundle()
-                    bundle.putString("JSON_DATA_2", jsonString)
-                    bundle.putString("imageFile_2", imageFile.absolutePath)
-                    val intent = Intent(this, ResultActivity::class.java)
-                    intent.putExtras(bundle)
+                    val bundle = Bundle().apply {
+                        putString("JSON_DATA_2", jsonString)
+                        putString("imageFile_2", imageFile.absolutePath)
+                        putBoolean("RETURN_TO_HOME", true)  // 设置标识
+                    }
+                    val intent = Intent(this, ResultActivity::class.java).apply {
+                        putExtras(bundle)
+                    }
+                    finish()
                     startActivity(intent)
                 } else {
                     Log.e("Upload Failure", "Failed to upload file")
+                    // 可以显示错误提示
                 }
             }
     }
@@ -307,11 +319,11 @@ class ImageXieChengBase64 : AppCompatActivity(), CoroutineScope by MainScope() {
                     if (response2.isSuccessful) {
                         Log.d("Upload Success4", "图片路径上传成功")
                         val imageBytes = response2.body?.bytes()
-                        val randomFileName = "image_${UUID.randomUUID()}.jpg"
+                        //val randomFileName = "image_${UUID.randomUUID()}.jpg"
                         val imageFile = imageBytes?.let { byteArray ->
                             File.createTempFile("fugv1", ".jpg").apply {
                                 writeBytes(byteArray) // 使用 'it' 引用 let 块的参数
-                                renameTo(File(parent, randomFileName))
+                                //renameTo(File(parent, randomFileName))
                             }
                         }
                         withContext(Dispatchers.Main) {

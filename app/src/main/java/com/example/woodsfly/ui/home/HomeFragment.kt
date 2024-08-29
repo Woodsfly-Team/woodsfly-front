@@ -61,6 +61,7 @@ class HomeFragment : Fragment() {
         }
         // 相机 点击事件
         binding.btCamera.setOnClickListener {
+
             val intent = Intent(requireContext(), CameraActivity::class.java)
             startActivity(intent)
         }
