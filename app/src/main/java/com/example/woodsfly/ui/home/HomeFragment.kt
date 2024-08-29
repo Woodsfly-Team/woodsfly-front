@@ -16,9 +16,9 @@ import com.example.woodsfly.introduce.IntroduceActivity3
 
 /**
  * v-3.2.1
- * 主页布局、点击事件
+ * 主页布局、麦克峰 相机主要功能点击事件
  *
- * @author Karenbluu
+ * @author Xiancaijiang
  * @Time 2024-08-18
  */
 
