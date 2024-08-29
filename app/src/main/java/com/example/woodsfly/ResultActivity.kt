@@ -25,7 +25,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 
 /**
- * 搜索结果页面+收藏功能
+ * 搜索结果页面
+ * 收藏记录与浏览记录
  *
  * @contributor Xiancaijiang、zzh0404
  * @Time 2024-08-23

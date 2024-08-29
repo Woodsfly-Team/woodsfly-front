@@ -49,6 +49,12 @@ import java.io.File
 import org.json.JSONObject
 import java.util.UUID
 
+/**
+ * 麦克风功能
+ *
+ * @author wrt
+ * @Time 2024-08-18
+ */
 
 @Suppress("DEPRECATION")
 class CameraActivity : ComponentActivity() {

@@ -1,4 +1,5 @@
 package com.example.woodsfly.http;
+
 /**
  * 基础API响应结果类，用于封装API调用的结果。
  *
@@ -6,6 +7,7 @@ package com.example.woodsfly.http;
  * @author zoeyyyy-git
  * @Time 2024-8-28
  */
+
 public class BaseApiResult<T> {
 
     int status;
