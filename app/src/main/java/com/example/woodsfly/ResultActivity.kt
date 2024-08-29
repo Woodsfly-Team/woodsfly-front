@@ -17,24 +17,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
-import com.example.woodsfly.ui.dashboard.ApiService
 import com.example.woodsfly.ui.dashboard.SearchDetailsResponse
 import com.google.gson.Gson
 import org.json.JSONObject
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * 搜索结果页面+收藏功能
  *
- * @contributor Karenbluu zzh0404
+ * @contributor Karenbluu、zzh0404
  * @Time 2024-08-23
  */
 
 class ResultActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
-    private var isFavorited = false // 用于保存收藏状态
+    private var isFavorited: Boolean = false  // 用于保存收藏状态
     private lateinit var chineseName: String
     private lateinit var englishName: String
 
@@ -66,26 +63,27 @@ class ResultActivity : AppCompatActivity() {
             toggleFavorite(star)
         }
 
-        if(json_en==2){
+        if (json_en == 2) {
             parseJson(jsonStr2.toString())
             loadImageFromPath(imagePath2.toString())
-        }else if(json_en==3){
+        } else if (json_en == 3) {
             parseJson(jsonStr3.toString())
             loadImageFromPath(imagePath3.toString())
-        }else if (json_en==1 && bundle != null && bundle.containsKey("JSON_DATA_1")) {
+        } else if (json_en == 1 && bundle != null && bundle.containsKey("JSON_DATA_1")) {
             // 从 Bundle 中获取 JSON 字符串
             val responseJson = bundle.getString("JSON_DATA_1")
             // 使用 Gson 反序列化 JSON 字符串为 SearchDetailsResponse 对象
             val gson = Gson()
-            val response: SearchDetailsResponse = gson.fromJson(responseJson, SearchDetailsResponse::class.java)
+            val response: SearchDetailsResponse =
+                gson.fromJson(responseJson, SearchDetailsResponse::class.java)
             parseJson_zjy(response)
             loadImageFromPath(imagePath1.toString())
         }
     }
 
     //解析拍照和录音传来的json字符串
-    private fun parseJson(jsonStr: String){
-        json_en=0
+    private fun parseJson(jsonStr: String) {
+        json_en = 0
 
         val jsonObject = JSONObject(jsonStr)
         // 获取顶层的 "code" 和 "message"
@@ -96,8 +94,8 @@ class ResultActivity : AppCompatActivity() {
         val dataObject = jsonObject.getJSONObject("data")
 
         // 从 "data" 对象中获取各个字段
-        val chineseName = dataObject.getString("chinese_name")
-        val englishName = dataObject.getString("english_name")
+        chineseName = dataObject.getString("chinese_name")
+        englishName = dataObject.getString("english_name")
         val incidence = dataObject.getString("incidence")
 
         // 获取 "define" 里的嵌套字段
@@ -112,18 +110,28 @@ class ResultActivity : AppCompatActivity() {
         val level = dataObject.getString("level")
         val link = dataObject.getString("link")
 
-        textLayout(chineseName, englishName, incidence, birdOrder, birdFamily, birdGenus, habitat, introduction, level)
+        textLayout(
+            chineseName,
+            englishName,
+            incidence,
+            birdOrder,
+            birdFamily,
+            birdGenus,
+            habitat,
+            introduction,
+            level
+        )
 
 
-        var button : Button = findViewById(R.id.link)
-        button.setOnClickListener{
+        var button: Button = findViewById(R.id.link)
+        button.setOnClickListener {
             openLink(link)
         }
     }
 
     //解析搜索传来的数据
-    private fun parseJson_zjy(jsonStr: SearchDetailsResponse){
-        json_en=0
+    private fun parseJson_zjy(jsonStr: SearchDetailsResponse) {
+        json_en = 0
 
 
         val code = jsonStr.code
@@ -133,8 +141,8 @@ class ResultActivity : AppCompatActivity() {
         val dataObject = jsonStr.data
 
         // 从 "data" 对象中获取各个字段
-        val chineseName = dataObject.chinese_name
-        val englishName = dataObject.english_name
+        chineseName = dataObject.chinese_name
+        englishName = dataObject.english_name
         val incidence = dataObject.incidence
         //val imageUrl = dataObject.image
 
@@ -151,45 +159,59 @@ class ResultActivity : AppCompatActivity() {
         val link = dataObject.link
 
 
-        textLayout(chineseName, englishName, incidence, birdOrder, birdFamily, birdGenus, habitat, introduction, level)
+        textLayout(
+            chineseName,
+            englishName,
+            incidence,
+            birdOrder,
+            birdFamily,
+            birdGenus,
+            habitat,
+            introduction,
+            level
+        )
 
 
-        var button : Button = findViewById(R.id.link)
-        button.setOnClickListener{
+        var button: Button = findViewById(R.id.link)
+        button.setOnClickListener {
             openLink(link)
         }
     }
 
 
-
-
-
-
     //TextView控件赋值
-    private fun textLayout(chineseName:String, englishName:String, incidence:String, birdOrder:String, birdFamily:String, birdGenus:String, habitat:String, introduction:String, level:String){
-        var chineseName0 : TextView = findViewById(R.id.chineseName)
-        var englishName0 : TextView = findViewById(R.id.englishName)
-        var incidence0 : TextView = findViewById(R.id.incidence)
-        var defineObject0 : TextView = findViewById(R.id.defineObject)
-        var habitat0 : TextView = findViewById(R.id.habitat)
-        var introduction0 : TextView = findViewById(R.id.introduction)
-        var level0 : TextView = findViewById(R.id.level)
+    private fun textLayout(
+        chineseName: String,
+        englishName: String,
+        incidence: String,
+        birdOrder: String,
+        birdFamily: String,
+        birdGenus: String,
+        habitat: String,
+        introduction: String,
+        level: String
+    ) {
+        var chineseName0: TextView = findViewById(R.id.chineseName)
+        var englishName0: TextView = findViewById(R.id.englishName)
+        var incidence0: TextView = findViewById(R.id.incidence)
+        var defineObject0: TextView = findViewById(R.id.defineObject)
+        var habitat0: TextView = findViewById(R.id.habitat)
+        var introduction0: TextView = findViewById(R.id.introduction)
+        var level0: TextView = findViewById(R.id.level)
 
-        chineseName0.text=chineseName
-        englishName0.text=englishName
-        incidence0.text=incidence
-        defineObject0.text="$birdOrder,$birdFamily,$birdGenus"
-        habitat0.text=habitat
-        introduction0.text=introduction
-        level0.text=level
+        chineseName0.text = chineseName
+        englishName0.text = englishName
+        incidence0.text = incidence
+        defineObject0.text = "$birdOrder,$birdFamily,$birdGenus"
+        habitat0.text = habitat
+        introduction0.text = introduction
+        level0.text = level
 
-        // 保存收藏项时使用
-        saveFavoriteItem(chineseName, englishName)
     }
 
     //加载网络图片
     private fun loadImageFromPath(imagePath: String) {
-        var imageView : ImageView = findViewById(R.id.imageUrl)
+        var imageView: ImageView = findViewById(R.id.imageUrl)
         if (!imagePath.isNullOrBlank()) {
             // 使用 Glide 加载图片
             Glide.with(this)
@@ -216,20 +238,22 @@ class ResultActivity : AppCompatActivity() {
     // 保存浏览记录
     private fun saveBrowsingHistory(bundle: Bundle?) {
         val editor = sharedPreferences.edit()
-        val browsingHistory = sharedPreferences.getString("browsing_history", "")?.split("\n")?.toMutableList() ?: mutableListOf()
+        val browsingHistory = sharedPreferences.getString("browsing_history", "")?.split("\n")?.toMutableList()
+                ?: mutableListOf()
 
         // 将新的浏览记录添加到列表头部
         if (bundle != null && bundle.containsKey("JSON_DATA_1")) {
             val responseJson = bundle.getString("JSON_DATA_1")
             val gson = Gson()
-            val response: SearchDetailsResponse = gson.fromJson(responseJson, SearchDetailsResponse::class.java)
+            val response: SearchDetailsResponse =
+                gson.fromJson(responseJson, SearchDetailsResponse::class.java)
             val chineseName = response.data.chinese_name
             val englishName = response.data.english_name
             browsingHistory.add(0, "$chineseName ($englishName)")
         }
 
-        // 保持最多 100 条浏览记录
-        if (browsingHistory.size > 100) {
+        // 保持最多 50 条浏览记录
+        if (browsingHistory.size > 50) {
             browsingHistory.removeAt(browsingHistory.size - 1)
         }
 
@@ -238,25 +262,43 @@ class ResultActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    // 收藏和取消收藏鸟类
+
+
     private fun toggleFavorite(star: Button) {
-        Log.d("ResultActivity", "toggleFavorite called. isFavorited: $isFavorited")
         isFavorited = !isFavorited
-        val newBackground = if (isFavorited) R.drawable.collect_button else R.drawable.cha01
-        star.setBackgroundResource(newBackground) // 更改按钮形状
-        Log.d("ResultActivity", "Button background changed. New background: $newBackground")
-        // 确保不调用 finish() 或其他导致 Activity 结束的方法
+        star.setBackgroundResource(if (isFavorited) R.drawable.collect_button else R.drawable.cha01) // 更改星星图标
+
+        if (isFavorited) {
+            // 在收藏之前检查是否已经存在
+            if (!isItemFavorited(chineseName, englishName)) {
+                saveFavoriteItem(chineseName, englishName) // 保存收藏项
+                Toast.makeText(this, "已收藏该项", Toast.LENGTH_SHORT).show() // 反馈用户已收藏
+            } else {
+                Toast.makeText(this, "已收藏该项", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            removeFavoriteItem(chineseName, englishName) // 移除收藏项
+            Toast.makeText(this, "已取消收藏", Toast.LENGTH_SHORT).show() // 反馈用户已取消收藏
+        }
     }
+
+    private fun isItemFavorited(chineseName: String, englishName: String): Boolean {
+        val favorites = sharedPreferences.getString("favorite_items", "")?.split("\n") ?: mutableListOf()
+        return favorites.contains("$chineseName ($englishName)")
+    }
+
 
     private fun saveFavoriteItem(chineseName: String, englishName: String) {
         val editor = sharedPreferences.edit()
         val favorites = sharedPreferences.getString("favorite_items", "")?.split("\n")?.toMutableList() ?: mutableListOf()
 
-        // 将新的收藏记录添加到列表头部
-        favorites.add(0, "$chineseName ($englishName)")
+        if (!favorites.contains("$chineseName ($englishName)")) { // 防止重复保存
+            // 将新的收藏记录添加到列表头部
+            favorites.add(0, "$chineseName ($englishName)")
+        }
 
-        // 保持最多 100 条收藏记录
-        if (favorites.size > 100) {
+        // 保持最多 50 条收藏记录
+        if (favorites.size > 50) {
             favorites.removeAt(favorites.size - 1)
         }
 
@@ -274,24 +316,4 @@ class ResultActivity : AppCompatActivity() {
         editor.putString("favorite_items", favorites.joinToString("\n"))
         editor.apply()
     }
-
-
-
-    /**
-     * 浏览与收藏记录 后端交互数据类
-     *
-     * @contributor Karenbluu
-     * @Time 2024-08-29
-     */
-
-    data class NetworkResponse(
-        val code: Int,
-        val message: String,
-        val data: Data?
-    )
-
-    data class Data(
-        val star_id: Int? = null,
-        val browse_id: Int? = null
-    )
-}
+    }
