@@ -5,6 +5,7 @@ import android.Manifest.permission.READ_MEDIA_AUDIO
 import android.Manifest.permission.RECORD_AUDIO
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -496,10 +497,12 @@ class RecordedActivity : AppCompatActivity() {
                         intent.putExtras(bundle)
                         startActivity(intent)
                     } else {
-                        Log.e("Upload Failure", "Failed to upload file")
+                        Log.e("Upload Failure", "没有跳转到结果页")
                     }
                 }
             }
+        }else if (requestCode == 4 && resultCode == RESULT_CANCELED){
+            finish()
         }
     }
 
