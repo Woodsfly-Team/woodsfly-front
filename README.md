@@ -7,7 +7,7 @@ https://github.com/Woodsfly-Team/woodsfly-front.git
 
 ## 一.运行环境
 
-- Android11+
+- Android 11+
 
 ## 二.项目分支
 
