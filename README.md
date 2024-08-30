@@ -5,9 +5,9 @@ https://github.com/Woodsfly-Team/woodsfly-front.git
 
 **感谢你为 woodsfly-front 项目做出贡献！**
 
-## 一.APP介绍
+## 一.运行环境
 
-本APP按照用户需求进行开发，可以通过拍照或导入照片的方式识别鸟类，也可以通过录音和上传音频文件的方式去识别鸟类，同时具有完备的搜索功能以及个人主页各项功能，可以满足用户各种功能。
+-Android11+
 
 ## 二.项目分支
 
